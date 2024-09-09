@@ -18,3 +18,6 @@
    6. Lakukan instalasi terhadap dependencies 'pip install -r requirements.txt'
    7. Buat proyek Django bernama 'toko_izaka' dengan perintah 'django-admin startproject toko_izaka .'
    8. Tambahkan 'ALLOWED_HOSTS = ["localhost", "127.0.0.1"]' di 'settings.py'
+   9. Nonaktifkan virtual environment 'deactivate'
+   10. Buatlah repositori GitHub baru bernama 'toko-izaka'
+   11. 
