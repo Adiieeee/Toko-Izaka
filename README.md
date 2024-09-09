@@ -1,7 +1,7 @@
 # Tugas 2 PBP
 ## Link Aplikasi PWS -> [LINKS 🔗](http://muhammad-adiansyah-tokoizakaa.pbp.cs.ui.ac.id/)
-### Jelaskan bagaimana cara kamu mengimplementasikan checklist di atas secara step-by-step
-#### Membuat sebuah proyek Django baru.
+## Jelaskan bagaimana cara kamu mengimplementasikan checklist di atas secara step-by-step
+### Membuat sebuah proyek Django baru.
    1. Buat direktori baru dengan nama 'toko-izaka' dan masuk ke dalamnya.
    2. Di dalam direktori tersebut, buka command prompt (Windows)
    3. Buat virtual environment 'python -m venv env'
