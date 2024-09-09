@@ -7,7 +7,7 @@
    3. Buat virtual environment 'python -m venv env'
    4. aktifkan virtual environment 'env\Scripts\activate'
    5. Di dalam direktori yang sama, buat berkas 'requirements.txt' dan tambahkan beberapa dependencies.
-      ```
+     ```
      django
      gunicorn
      whitenoise
@@ -15,6 +15,6 @@
      requests
      urllib3
      ```
-  6. Lakukan instalasi terhadap dependencies 'pip install -r requirements.txt'
-  7. Buat proyek Django bernama 'toko_izaka' dengan perintah 'django-admin startproject toko_izaka .'
-  8. Tambahkan 'ALLOWED_HOSTS = ["localhost", "127.0.0.1"]' di 'settings.py'
+   7. Lakukan instalasi terhadap dependencies 'pip install -r requirements.txt'
+   8. Buat proyek Django bernama 'toko_izaka' dengan perintah 'django-admin startproject toko_izaka .'
+   9. Tambahkan 'ALLOWED_HOSTS = ["localhost", "127.0.0.1"]' di 'settings.py'
