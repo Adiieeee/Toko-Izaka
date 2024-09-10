@@ -20,19 +20,32 @@
    8. Tambahkan `ALLOWED_HOSTS = ["localhost", "127.0.0.1"]` di `settings.py`
    9. Nonaktifkan virtual environment `deactivate`
 
-
-
 ### Membuat aplikasi dengan nama `main` pada proyek tersebut.
    1. aktifkan virtual environment `env\Scripts\activate`
    2. membuat aplikasi baru dengan nama `main` dengan perintah `python manage.py startapp main`
-
-
+   3. Buka berkas `settings.py` di dalam direktori proyek `toko_izaka`, tambahkan `main` ke dalam daftar aplikasi pada variabel `INSTALLED_APPS`
+      ```
+      INSTALLED_APPS = [
+          ...,
+          'main'
+      ]
+      ```
 
 ### Melakukan routing pada proyek agar dapat menjalankan aplikasi `main`.
-   17. Buka berkas `settings.py` di dalam direktori proyek `toko_izaka`, tambahkan `main` ke dalam daftar aplikasi pada variabel `INSTALLED_APPS`
-   18. Buat direktori baru bernama `templates` di dalam direktori aplikasi `main`
-   19. Di dalam direktori `templates`, buat berkas baru bernama `main.html`. Isi berkas `main.html` dengan kode html sesuai keinginan mu dan dapat dibuat sebaik mungkin.
-   20. Buka berkas `models.py` pada direktori aplikasi `main` dan isi dengan
+   1. Buatlah berkas `urls.py` di dalam direktori `main` lalu isi dengan kode ini
+       ```
+       from django.urls import path
+       from main.views import show_main
+      
+       app_name = 'main'
+      
+       urlpatterns = [
+           path('', show_main, name='show_main'),
+       ]
+       ```
+
+### Membuat model pada aplikasi `main` dengan nama `Product` dan memiliki atribut wajib sebagai berikut `name`, `price`, `description`.
+   1. Buka berkas `models.py` pada direktori aplikasi `main` dan isi dengan
        ```
        from django.db import models
 
@@ -41,9 +54,11 @@
           price = models.IntegerField()
           description = models.TextField()
        ```
-   21. Jalankan perintah berikut untuk membuat migrasi model `python manage.py makemigrations`
-   22. Jalankan perintah berikut untuk menerapkan migrasi ke dalam basis data lokal. `python manage.py migrate`
-   23. Buka berkas `views.py` yang terletak di dalam berkas aplikasi `main` lalu tambahkan fungsi `show_main`.
+   2. Jalankan perintah berikut untuk membuat migrasi model `python manage.py makemigrations`
+   3. Jalankan perintah berikut untuk menerapkan migrasi ke dalam basis data lokal. `python manage.py migrate`
+
+### Membuat sebuah fungsi pada `views.py` untuk dikembalikan ke dalam sebuah template HTML yang menampilkan nama aplikasi serta nama dan kelas kamu.
+   1. Buka berkas `views.py` yang terletak di dalam berkas aplikasi `main` lalu tambahkan fungsi `show_main`.
        ```
        from django.shortcuts import render
 
@@ -57,6 +72,8 @@
 
        return render(request, "main.html", context)
        ```
+
+### 
    24. Buka berkas `main.html` lalu ubah kodenya menjadi struktur kode Django yang sesuai untuk menampilkan data.
    25. Buatlah berkas `urls.py` di dalam direktori `main` lalu isi dengan kode ini
        ```
