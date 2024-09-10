@@ -2,7 +2,7 @@
 ## Link Aplikasi PWS -> [LINKS 🔗](http://muhammad-adiansyah-tokoizakaa.pbp.cs.ui.ac.id/)
 ## Jelaskan bagaimana cara kamu mengimplementasikan checklist di atas secara step-by-step
 ### Membuat sebuah proyek Django baru.
-   1. Buat direktori baru dengan nama `toko=-izaka` dan masuk ke dalamnya.
+   1. Buat direktori baru dengan nama `toko-izaka` dan masuk ke dalamnya.
    2. Di dalam direktori tersebut, buka command prompt (Windows)
    3. Buat virtual environment `python -m venv env`
    4. aktifkan virtual environment `env\Scripts\activate`
@@ -167,3 +167,42 @@
    15. membuat aplikasi baru dengan nama `main` dengan perintah `python manage.py startapp main`
    16. Buka berkas `settings.py` di dalam direktori proyek `toko_izaka`, tambahkan `main` ke dalam daftar aplikasi pada variabel `INSTALLED_APPS`
    17. Buat direktori baru bernama `templates` di dalam direktori aplikasi `main`
+   18. Di dalam direktori `templates`, buat berkas baru bernama `main.html`. Isi berkas `main.html` dengan kode html sesuai keinginan mu dan dapat dibuat sebaik mungkin.
+   19. Buka berkas `models.py` pada direktori aplikasi `main` dan isi dengan
+       ```
+       from django.db import models
+
+       class Product(models.Model):
+          name = models.CharField(max_length=255)
+          price = models.IntegerField()
+          description = models.TextField()
+       ```
+   20. Jalankan perintah berikut untuk membuat migrasi model `python manage.py makemigrations`
+   21. Jalankan perintah berikut untuk menerapkan migrasi ke dalam basis data lokal. `python manage.py migrate`
+   22. Buka berkas `views.py` yang terletak di dalam berkas aplikasi `main` lalu tambahkan fungsi `show_main`.
+       ```
+       from django.shortcuts import render
+
+       def show_main(request):
+           context = {
+               'name' : 'Phantom Mask',
+               'image' : 'https://imgur.com/a/U0fYFir',
+               'price': '700000',
+               'description': 'A mysterious Mask found in the depth of mountains, legend said that this mask once belong the the monkey king itself'
+           }
+
+       return render(request, "main.html", context)
+       ```
+   23. Buka berkas `main.html` lalu ubah kodenya menjadi struktur kode Django yang sesuai untuk menampilkan data.
+   24. Buatlah berkas `urls.py` di dalam direktori `main` lalu isi dengan kode ini
+       ```
+       from django.urls import path
+       from main.views import show_main
+      
+       app_name = 'main'
+      
+       urlpatterns = [
+           path('', show_main, name='show_main'),
+       ]
+       ```
+
