@@ -1,4 +1,4 @@
-# Tugas 2 PBP
+# Toko Izaka 🎭
 ## Link Aplikasi PWS -> [LINKS 🔗](http://muhammad-adiansyah-tokoizakaa.pbp.cs.ui.ac.id/)
 ## Jelaskan bagaimana cara kamu mengimplementasikan checklist di atas secara step-by-step
 ### Membuat sebuah proyek Django baru.
@@ -100,7 +100,17 @@
 onyongg
 
 ## Jelaskan fungsi `git` dalam pengembangan perangkat lunak!
-onyongg
+### Git adalah sebuah sistem kontrol versi (version control system) yang sangat berguna dalam pengembangan perangkat lunak. Git mempunyai banyak seperti:
+1. **Sistem kontrl versi**
+   Git dapat melacak perubahan yang dilakukan pada kode. Dengan begitu, kita bisa melihat sejarah perubahan suatu file atau proyek secara lengkap.
+2. **Kolaborasi**
+   Git memungkinkan beberapa pengembang bekerja secara simultan pada proyek yang sama. Setiap pengembang memiliki salinan proyek (repository) sendiri, sehingga bisa bekerja secara independen
+3. **Reverty atau kembali ke versi sebelumnya**
+   Jika terjadi kesalahan atau bug dalam kode, Git memudahkan pengembang untuk kembali ke versi sebelumnya dari proyek tersebut.
+4. **Backup**
+   Git secara otomatis membuat backup dari kode Anda. Jika terjadi masalah pada komputer atau data hilang, Anda bisa memulihkan kode dari backup Git.
+5. **Cabang (Branching)**
+   Git mendukung pembuatan cabang (branch) yang memungkinkan pengembang untuk bekerja pada fitur baru secara terpisah tanpa mengganggu kode utama. Cabang ini bisa digabungkan kembali ke kode utama ketika fitur tersebut sudah selesai.
 
 ## Menurut Anda, dari semua framework yang ada, mengapa framework Django dijadikan permulaan pembelajaran pengembangan perangkat lunak?
 onyongg
