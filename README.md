@@ -205,4 +205,20 @@
            path('', show_main, name='show_main'),
        ]
        ```
-
+   25. Buka berkas `urls.py` di dalam direktori proyek `toko_izaka`
+   26. Impor fungsi `include` dari `django.urls`.
+   27. Tambahkan rute URL seperti berikut untuk mengarahkan ke tampilan `main` di dalam variabel `urlpatterns`
+       ```
+       urlpatterns = [
+           ...
+           path('', include('main.urls')),
+           ...
+       ]
+       ```
+   28. Lakukan `add`, `commit`, dan `push` dari direktori repositori lokal.
+   29. Akses halaman PWS pada https://pbp.cs.ui.ac.id.
+   30. Buat proyek baru dengan menekan tombol `Create New Project`
+   31. isi `Project Name` dengan `toko-izakaa`. Setelah itu, tekan `Create New Project`
+   32. Pada `settings.py` di proyek Django yang sudah kamu buat tadi, tambahkan URL deployment PWS pada `ALLOWED_HOSTS`
+   33. Langkah ini perlu kamu lakukan agar proyek Django kamu dapat diakses melalui URL deployment PWS. Lakukan `git add`, `commit`, dan `push` perubahan ini ke repositori GitHub kamu.
+   34. Jalankan perintah yang terdapat pada informasi Project Command pada halaman PWS, tunggu hingga kelar building lalu bisa pencet tombol `view project`
