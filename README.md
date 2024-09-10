@@ -64,31 +64,22 @@
 
        def show_main(request):
            context = {
+               'toko' : 'Toko Izaka',
                'name' : 'Phantom Mask',
                'image' : 'https://imgur.com/a/U0fYFir',
                'price': '700000',
                'description': 'A mysterious Mask found in the depth of mountains, legend said that this mask once belong the the monkey king itself'
+               'nama_kamu' : 'Muhammad Adiansyah',
+               'kelas' : 'PBP D'
            }
 
        return render(request, "main.html", context)
        ```
 
-### 
-   24. Buka berkas `main.html` lalu ubah kodenya menjadi struktur kode Django yang sesuai untuk menampilkan data.
-   25. Buatlah berkas `urls.py` di dalam direktori `main` lalu isi dengan kode ini
-       ```
-       from django.urls import path
-       from main.views import show_main
-      
-       app_name = 'main'
-      
-       urlpatterns = [
-           path('', show_main, name='show_main'),
-       ]
-       ```
-   26. Buka berkas `urls.py` di dalam direktori proyek `toko_izaka`
-   27. Impor fungsi `include` dari `django.urls`.
-   28. Tambahkan rute URL seperti berikut untuk mengarahkan ke tampilan `main` di dalam variabel `urlpatterns`
+### Membuat sebuah routing pada urls.py aplikasi main untuk memetakan fungsi yang telah dibuat pada views.py
+   1. Buka berkas `urls.py` di dalam direktori proyek `toko_izaka`
+   2. Impor fungsi `include` dari `django.urls`.
+   3. Tambahkan rute URL seperti berikut untuk mengarahkan ke tampilan `main` di dalam variabel `urlpatterns`
        ```
        urlpatterns = [
            ...
@@ -96,12 +87,23 @@
            ...
        ]
        ```
-   29. Lakukan `add`, `commit`, dan `push` dari direktori repositori lokal.
-   30. Akses halaman PWS pada https://pbp.cs.ui.ac.id.
-   31. Buat proyek baru dengan menekan tombol `Create New Project`
-   32. isi `Project Name` dengan `toko-izakaa`. Setelah itu, tekan `Create New Project`
-   33. Pada `settings.py` di proyek Django yang sudah kamu buat tadi, tambahkan URL deployment PWS pada `ALLOWED_HOSTS`
-   34. Langkah ini perlu kamu lakukan agar proyek Django kamu dapat diakses melalui URL deployment PWS. Lakukan `git add`, `commit`, dan `push` perubahan ini ke repositori GitHub kamu.
-   35. Jalankan perintah yang terdapat pada informasi Project Command pada halaman PWS, tunggu hingga kelar building lalu bisa pencet tombol `view project`
 
-### 
+### Melakukan deployment ke PWS terhadap aplikasi yang sudah dibuat sehingga nantinya dapat diakses oleh teman-temanmu melalui Internet.
+   1. Akses halaman PWS pada https://pbp.cs.ui.ac.id.
+   2. Buat proyek baru dengan menekan tombol `Create New Project`
+   3. isi `Project Name` dengan `toko-izakaa`. Setelah itu, tekan `Create New Project`
+   4. Pada `settings.py` di proyek Django yang sudah kamu buat tadi, tambahkan URL deployment PWS pada `ALLOWED_HOSTS`
+   5. Langkah ini perlu kamu lakukan agar proyek Django kamu dapat diakses melalui URL deployment PWS. Lakukan `git add`, `commit`, dan `push` perubahan ini ke repositori GitHub kamu.
+   6. Jalankan perintah yang terdapat pada informasi Project Command pada halaman PWS, tunggu hingga kelar building lalu bisa pencet tombol `view project`
+
+## Buatlah bagan yang berisi request client ke web aplikasi berbasis Django beserta responnya dan jelaskan pada bagan tersebut kaitan antara `urls.py`, `views.py`, `models.py`, dan berkas `html`.
+onyongg
+
+## Jelaskan fungsi `git` dalam pengembangan perangkat lunak!
+onyongg
+
+## Menurut Anda, dari semua framework yang ada, mengapa framework Django dijadikan permulaan pembelajaran pengembangan perangkat lunak?
+onyongg
+
+## Mengapa model pada Django disebut sebagai ORM?
+oya
