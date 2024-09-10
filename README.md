@@ -20,9 +20,13 @@
    8. Tambahkan `ALLOWED_HOSTS = ["localhost", "127.0.0.1"]` di `settings.py`
    9. Nonaktifkan virtual environment `deactivate`
 
+
+
 ### Membuat aplikasi dengan nama `main` pada proyek tersebut.
    1. aktifkan virtual environment `env\Scripts\activate`
    2. membuat aplikasi baru dengan nama `main` dengan perintah `python manage.py startapp main`
+
+
 
 ### Melakukan routing pada proyek agar dapat menjalankan aplikasi `main`.
    17. Buka berkas `settings.py` di dalam direktori proyek `toko_izaka`, tambahkan `main` ke dalam daftar aplikasi pada variabel `INSTALLED_APPS`
