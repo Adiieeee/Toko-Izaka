@@ -7,7 +7,7 @@
    3. Buat virtual environment `python -m venv env`
    4. aktifkan virtual environment `env\Scripts\activate`
    5. Di dalam direktori yang sama, buat berkas `requirements.txt` dan tambahkan beberapa dependencies.
-      ```
+      ```python
       django
       gunicorn
       whitenoise
@@ -24,7 +24,7 @@
    1. aktifkan virtual environment `env\Scripts\activate`
    2. membuat aplikasi baru dengan nama `main` dengan perintah `python manage.py startapp main`
    3. Buka berkas `settings.py` di dalam direktori proyek `toko_izaka`, tambahkan `main` ke dalam daftar aplikasi pada variabel `INSTALLED_APPS`
-      ```
+      ```python
       INSTALLED_APPS = [
           ...,
           'main'
@@ -33,7 +33,7 @@
 
 ### Melakukan routing pada proyek agar dapat menjalankan aplikasi `main`.
    1. Buatlah berkas `urls.py` di dalam direktori `main` lalu isi dengan kode ini
-       ```
+       ```python
        from django.urls import path
        from main.views import show_main
       
@@ -46,7 +46,7 @@
 
 ### Membuat model pada aplikasi `main` dengan nama `Product` dan memiliki atribut wajib sebagai berikut `name`, `price`, `description`.
    1. Buka berkas `models.py` pada direktori aplikasi `main` dan isi dengan
-       ```
+       ```python
        from django.db import models
 
        class Product(models.Model):
@@ -59,7 +59,7 @@
 
 ### Membuat sebuah fungsi pada `views.py` untuk dikembalikan ke dalam sebuah template HTML yang menampilkan nama aplikasi serta nama dan kelas kamu.
    1. Buka berkas `views.py` yang terletak di dalam berkas aplikasi `main` lalu tambahkan fungsi `show_main`.
-       ```
+       ```python
        from django.shortcuts import render
 
        def show_main(request):
@@ -80,7 +80,7 @@
    1. Buka berkas `urls.py` di dalam direktori proyek `toko_izaka`
    2. Impor fungsi `include` dari `django.urls`.
    3. Tambahkan rute URL seperti berikut untuk mengarahkan ke tampilan `main` di dalam variabel `urlpatterns`
-       ```
+       ```python
        urlpatterns = [
            ...
            path('', include('main.urls')),
@@ -101,15 +101,15 @@ onyongg
 
 ## Jelaskan fungsi `git` dalam pengembangan perangkat lunak!
 ### Git adalah sebuah sistem kontrol versi (version control system) yang sangat berguna dalam pengembangan perangkat lunak. Git mempunyai banyak seperti:
-1. **Sistem kontrl versi**
+1. **Sistem kontrol versi**,
    Git dapat melacak perubahan yang dilakukan pada kode. Dengan begitu, kita bisa melihat sejarah perubahan suatu file atau proyek secara lengkap.
-2. **Kolaborasi**
+2. **Kolaborasi**,
    Git memungkinkan beberapa pengembang bekerja secara simultan pada proyek yang sama. Setiap pengembang memiliki salinan proyek (repository) sendiri, sehingga bisa bekerja secara independen
-3. **Reverty atau kembali ke versi sebelumnya**
+3. **Reverty atau kembali ke versi sebelumnya**,
    Jika terjadi kesalahan atau bug dalam kode, Git memudahkan pengembang untuk kembali ke versi sebelumnya dari proyek tersebut.
-4. **Backup**
+4. **Backup**,
    Git secara otomatis membuat backup dari kode Anda. Jika terjadi masalah pada komputer atau data hilang, Anda bisa memulihkan kode dari backup Git.
-5. **Cabang (Branching)**
+5. **Cabang (Branching)**,
    Git mendukung pembuatan cabang (branch) yang memungkinkan pengembang untuk bekerja pada fitur baru secara terpisah tanpa mengganggu kode utama. Cabang ini bisa digabungkan kembali ke kode utama ketika fitur tersebut sudah selesai.
 
 ## Menurut Anda, dari semua framework yang ada, mengapa framework Django dijadikan permulaan pembelajaran pengembangan perangkat lunak?
