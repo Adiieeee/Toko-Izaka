@@ -97,7 +97,7 @@
    6. Jalankan perintah yang terdapat pada informasi Project Command pada halaman PWS, tunggu hingga kelar building lalu bisa pencet tombol `view project`
 
 ## Buatlah bagan yang berisi request client ke web aplikasi berbasis Django beserta responnya dan jelaskan pada bagan tersebut kaitan antara `urls.py`, `views.py`, `models.py`, dan berkas `html`.
-onyongg
+![image](https://github.com/user-attachments/assets/fb42c6fe-42ee-45d4-9173-2f0df1400b2e)
 
 ## Jelaskan fungsi `git` dalam pengembangan perangkat lunak!
 ### Git adalah sebuah sistem kontrol versi (version control system) yang sangat berguna dalam pengembangan perangkat lunak. Git mempunyai banyak seperti:
