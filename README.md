@@ -119,6 +119,8 @@ Django sering dijadikan permulaan pembelajaran pengembangan perangkat lunak kare
 ### Mengapa model pada Django disebut sebagai ORM?
 ORM adalah singkatan dari Object-Relational Mapper. ORM adalah teknik yang digunakan untuk memetakan objek dalam bahasa pemrograman dengan tabel dan kolom dalam database relasional. Dalam Django, ORM digunakan untuk mengelola interaksi antara model Python dengan database. Model Python adalah kelas yang merepresentasikan struktur data dalam aplikasi. Setiap atribut dalam model Python dipetakan ke kolom dalam tabel database.
 
+
+
 # Tugas 3 PBP
 ### Jelaskan mengapa kita memerlukan data delivery dalam pengimplementasian sebuah platform?
 Data delivery dalam pengimplementasian sebuah platform sangat penting karena memungkinkan platform tersebut berfungsi secara optimal dan efisien dalam mengirimkan, menerima, dan mengelola data yang dibutuhkan untuk operasionalnya. Dalam konteks platform, data delivery berperan sebagai "pembuluh darah" yang mengaliri informasi dari berbagai sumber ke berbagai tujuan. Tanpa data delivery yang efektif, sebuah platform tidak akan berfungsi dengan baik.
@@ -141,7 +143,7 @@ Method is_valid() pada form Django berfungsi untuk memvalidasi data yang dikirim
 csrf_token dalam Django diperlukan untuk melindungi aplikasi dari serangan Cross-Site Request Forgery (CSRF), yang merupakan salah satu bentuk serangan keamanan di mana penyerang mencoba mengeksploitasi sesi pengguna yang telah terautentikasi untuk mengirimkan permintaan berbahaya ke server tanpa sepengetahuan atau persetujuan pengguna.
 
 ### Jelaskan bagaimana cara kamu mengimplementasikan checklist di atas secara step-by-step (bukan hanya sekadar mengikuti tutorial).
-1. Membuat input `form` untuk menambahkan objek model pada app sebelumnya.
+**1. Membuat input `form` untuk menambahkan objek model pada app sebelumnya.**
    - Buat direktori templates pada direktori utama (root folder) dan buatlah sebuah berkas HTML baru bernama base.html.
      ```python
      {% load static %}
@@ -187,7 +189,7 @@ csrf_token dalam Django diperlukan untuk melindungi aplikasi dari serangan Cross
      from main.forms import ProductForm
      from main.models import Product
      ```
-   -  buat fungsi baru dengan nama `create_product` yang menerima parameter `request`
+   - Buat fungsi baru dengan nama `create_product` yang menerima parameter `request`
      ```python
      def create_product(request):
      form = ProductForm(request.POST or None)
@@ -215,6 +217,108 @@ csrf_token dalam Django diperlukan untuk melindungi aplikasi dari serangan Cross
      from main.views import show_main, create_product'
      ```
    - Tambahkan path URL ke dalam variabel `urlpatterns` pada `urls.py` di `main`
+     ```python
+     urlpatterns = [
+        ...
+        path('create-product', create_product, name='create_product'),
+     ]
+     ```
+   - Buat berkas HTML baru dengan nama `create_product.html` pada direktori `main/templates`
+     ```python
+     {% extends 'base.html' %} 
+     {% block content %}
+     <h1>Add New Mood Entry</h1>
+    
+     <form method="POST">
+       {% csrf_token %}
+       <table>
+         {{ form.as_table }}
+         <tr>
+           <td></td>
+           <td>
+             <input type="submit" value="Add Mood Product" />
+           </td>
+         </tr>
+       </table>
+     </form>
+    
+     {% endblock %}
+     ```
+   - Buka `main.html` dan tambahkan kode berikut di dalam `{% block content %}`
+     ```python
+     {% if not product_entries %}
+         <p>Belum ada data product</p>
+         {% else %}
+         <table>
+         <tr>
+             <th>name</th>
+             <th>price</th>
+             <th>description</th>
+             <th>image</th>
+         </tr>
+
+         {% comment %} Berikut cara memperlihatkan data mood di bawah baris ini 
+         {% endcomment %} 
+         {% for product_entry in product_entries %}
+         <tr>
+             <td>{{product_entry.name}}</td>
+             <td>{{product_entry.price}}</td>
+             <td>{{product_entry.description}}</td>
+             <td><img src="{{ product_entry.image.url }}" alt="Product Image" width="100"></td>
+         </tr>
+         {% endfor %}
+         </table>
+         {% endif %}
+
+         <br />
+
+         <a href="{% url 'main:create_product' %}">
+         <button>Add New Product</button>
+         </a>
+     ```
+     
+   **2. Tambahkan 4 fungsi `views` baru untuk melihat objek yang sudah ditambahkan dalam format XML, JSON, XML by ID, dan JSON by ID.**
+   - Buka `views.py` yang ada pada direktori `main` dan tambahkan import
+     ```python
+     from django.http import HttpResponse
+     from django.core import serializers
+     ```
+   - Buatlah sebuah fungsi baru yang menerima parameter request dengan nama `show_xml`, `show_json`, `show_xml_by_id`, dan `show_json_by_id` dan tambahkan return function berupa HttpResponse yang berisi parameter data hasil query yang sudah diserialisasi menjadi JSON atau XML dan parameter content_type dengan value "application/xml" (untuk format XML) atau "application/json" (untuk format JSON).
+     ```python
+     def show_xml(request):
+     data = Product.objects.all()
+     return HttpResponse(serializers.serialize("xml", data), content_type="application/xml")
+     ```
+     ```python
+     def show_json(request):
+     data = Product.objects.all()
+     return HttpResponse(serializers.serialize("json", data), content_type="application/json")
+     ```
+     ```python
+     def show_xml_by_id(request, id):
+     data = Product.objects.filter(pk=id)
+     return HttpResponse(serializers.serialize("xml", data), content_type="application/xml")
+     ```
+     ```python
+     def show_json_by_id(request, id):
+     data = Product.objects.filter(pk=id)
+     return HttpResponse(serializers.serialize("json", data), content_type="application/json")
+     ```
+
+   **3. Membuat routing URL untuk masing-masing views yang telah ditambahkan pada poin 2.**
+   - Buka `urls.py` yang ada pada direktori `main` dan import fungsi tadi
+     ```python
+     from main.views import show_main, create_product, show_xml, show_json, show_xml_by_id, show_json_by_id
+     ```
+   - Tambahkan path URL ke dalam `urlpatterns`
+     ```python
+     ...
+     path('xml/', show_xml, name='show_xml'),
+     path('json/', show_json, name='show_json'),
+     path('xml/<str:id>/', show_xml_by_id, name='show_xml_by_id'),
+     path('json/<str:id>/', show_json_by_id, name='show_json_by_id'),
+     ...
+     ```
 
 ### Mengakses keempat URL di poin 2 menggunakan Postman, membuat screenshot dari hasil akses URL pada Postman, dan menambahkannya ke dalam README.md
 Setuju
