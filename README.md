@@ -1,6 +1,6 @@
 # Toko Izaka 🎭
-## Link Aplikasi PWS -> [LINKS 🔗](http://muhammad-adiansyah-tokoizakaa.pbp.cs.ui.ac.id/)
-## Tugas 2 PBP
+### Link Aplikasi PWS -> [LINKS 🔗](http://muhammad-adiansyah-tokoizakaa.pbp.cs.ui.ac.id/)
+# Tugas 2 PBP
 ### Jelaskan bagaimana cara kamu mengimplementasikan checklist di atas secara step-by-step
    **1. Membuat sebuah proyek Django baru.**
    - Buat direktori baru dengan nama `toko-izaka` dan masuk ke dalamnya.
@@ -119,12 +119,20 @@ Django sering dijadikan permulaan pembelajaran pengembangan perangkat lunak kare
 ### Mengapa model pada Django disebut sebagai ORM?
 ORM adalah singkatan dari Object-Relational Mapper. ORM adalah teknik yang digunakan untuk memetakan objek dalam bahasa pemrograman dengan tabel dan kolom dalam database relasional. Dalam Django, ORM digunakan untuk mengelola interaksi antara model Python dengan database. Model Python adalah kelas yang merepresentasikan struktur data dalam aplikasi. Setiap atribut dalam model Python dipetakan ke kolom dalam tabel database.
 
-## Tugas 3 PBP
+# Tugas 3 PBP
 ### Jelaskan mengapa kita memerlukan data delivery dalam pengimplementasian sebuah platform?
-Setuju
+Data delivery dalam pengimplementasian sebuah platform sangat penting karena memungkinkan platform tersebut berfungsi secara optimal dan efisien dalam mengirimkan, menerima, dan mengelola data yang dibutuhkan untuk operasionalnya. Dalam konteks platform, data delivery berperan sebagai "pembuluh darah" yang mengaliri informasi dari berbagai sumber ke berbagai tujuan. Tanpa data delivery yang efektif, sebuah platform tidak akan berfungsi dengan baik.
 
 ### Menurutmu, mana yang lebih baik antara XML dan JSON? Mengapa JSON lebih populer dibandingkan XML?
-Setuju
+Secara umum JSON lebih populer karena XML karena:
+1. Kesederhanaannya dalam membaca
+   JSON memiliki sintaks yang lebih sederhana dan lebih mudah dibaca serta ditulis dibandingkan XML. JSON menggunakan pasangan kunci-nilai yang lebih intuitif,       terutama bagi pengembang yang sudah familiar dengan JavaScript
+2. Ukuran file yang lebih kecil
+   JSON cenderung menghasilkan ukuran file yang lebih kecil dibandingkan XML karena tidak menggunakan tag penutup yang panjang, membuatnya lebih efisien dalam penyimpanan dan transmisi data
+3. Kompatibilitas dengan JavaScript
+   SON adalah format asli untuk JavaScript, sehingga sangat kompatibel dengan aplikasi web modern yang menggunakan JavaScript. Ini membuat integrasi dan penggunaan JSON lebih mudah dalam pengembangan web
+4. Dukungan untuk Array
+   JSON mendukung array secara langsung, yang sangat berguna untuk menyimpan dan mengelola kumpulan data. XML, di sisi lain, memerlukan struktur yang lebih kompleks untuk mencapai hal yang sama
 
 ### Jelaskan fungsi dari method `is_valid()` pada form Django dan mengapa kita membutuhkan method tersebut?
 Setuju
