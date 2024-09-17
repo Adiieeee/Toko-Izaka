@@ -1,6 +1,5 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
+{% extends 'base.html' %}
+{% block meta %}
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Toko Izaka</title>
@@ -67,11 +66,11 @@
             }
         }
     </style>
-</head>
-<body>
+{% endblock meta %}
 
-    <div class="container">
-        <h1>{{ toko }}</h1>
+{% block content %}
+    {% comment %} <div class="container">
+        <h1>Toko Izaka</h1>
 
         <h5>Name:</h5>
         <p>{{ name }}</p>
@@ -83,9 +82,36 @@
         <h5>Description:</h5>
         <p>{{ description }}</p>
 
-        <h4>Nama: {{ nama_kamu }} | kelas: {{ kelas }}</h4>
+        <h4>Nama: Muhammad Adiansyah | kelas: PBP B</h4>
 
-    </div>
+    </div> {% endcomment %}
+    {% if not product_entries %}
+<p>Belum ada data product</p>
+{% else %}
+<table>
+  <tr>
+    <th>name</th>
+    <th>price</th>
+    <th>description</th>
+    <th>image</th>
+  </tr>
 
-</body>
-</html>
+  {% comment %} Berikut cara memperlihatkan data mood di bawah baris ini 
+  {% endcomment %} 
+  {% for product_entry in product_entries %}
+  <tr>
+    <td>{{product_entry.name}}</td>
+    <td>{{product_entry.price}}</td>
+    <td>{{product_entry.description}}</td>
+    <td>{{product_entry.image}}</td>
+  </tr>
+  {% endfor %}
+</table>
+{% endif %}
+
+<br />
+
+<a href="{% url 'main:create_product_entries' %}">
+  <button>Add New Product</button>
+</a>
+{% endblock content %}

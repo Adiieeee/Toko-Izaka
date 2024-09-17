@@ -1,14 +1,22 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
+from main.forms import ProductForm
+from main.models import Product
 
 def show_main(request):
+    product_entries = Product.objects.all()
+
     context = {
-        'toko' : 'Toko Izaka',
-        'name' : 'Phantom Mask',
-        'image' : 'https://imgur.com/a/U0fYFir',
-        'price': '700000',
-        'description': 'A mysterious Mask found in the depth of mountains, legend said that this mask once belong the the monkey king itself',
-        'nama_kamu' : 'Muhammad Adiansyah',
-        'kelas' : 'PBP D'
+        'product_entries': product_entries,
     }
 
     return render(request, "main.html", context)
+
+def create_product(request):
+    form = ProductForm(request.POST or None)
+
+    if form.is_valid() and request.method == "POST":
+        form.save()
+        return redirect('main:show_main')
+
+    context = {'form': form}
+    return render(request, "create_mood_entry.html", context)
