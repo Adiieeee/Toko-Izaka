@@ -135,10 +135,10 @@ Secara umum JSON lebih populer karena XML karena:
    JSON mendukung array secara langsung, yang sangat berguna untuk menyimpan dan mengelola kumpulan data. XML, di sisi lain, memerlukan struktur yang lebih kompleks untuk mencapai hal yang sama
 
 ### Jelaskan fungsi dari method `is_valid()` pada form Django dan mengapa kita membutuhkan method tersebut?
-Setuju
+Method is_valid() pada form Django berfungsi untuk memvalidasi data yang dikirimkan melalui form sebelum data tersebut diproses lebih lanjut, seperti disimpan ke dalam database atau digunakan di dalam aplikasi. Method ini sangat penting dalam proses pengelolaan form, terutama untuk memastikan bahwa data yang diterima adalah valid dan sesuai dengan aturan atau batasan yang telah ditentukan.
 
 ### Mengapa kita membutuhkan csrf_token saat membuat form di Django? Apa yang dapat terjadi jika kita tidak menambahkan csrf_token pada form Django? Bagaimana hal tersebut dapat dimanfaatkan oleh penyerang?
-Setuju
+csrf_token dalam Django diperlukan untuk melindungi aplikasi dari serangan Cross-Site Request Forgery (CSRF), yang merupakan salah satu bentuk serangan keamanan di mana penyerang mencoba mengeksploitasi sesi pengguna yang telah terautentikasi untuk mengirimkan permintaan berbahaya ke server tanpa sepengetahuan atau persetujuan pengguna.
 
 ### Jelaskan bagaimana cara kamu mengimplementasikan checklist di atas secara step-by-step (bukan hanya sekadar mengikuti tutorial).
 Setuju
