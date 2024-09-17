@@ -141,7 +141,80 @@ Method is_valid() pada form Django berfungsi untuk memvalidasi data yang dikirim
 csrf_token dalam Django diperlukan untuk melindungi aplikasi dari serangan Cross-Site Request Forgery (CSRF), yang merupakan salah satu bentuk serangan keamanan di mana penyerang mencoba mengeksploitasi sesi pengguna yang telah terautentikasi untuk mengirimkan permintaan berbahaya ke server tanpa sepengetahuan atau persetujuan pengguna.
 
 ### Jelaskan bagaimana cara kamu mengimplementasikan checklist di atas secara step-by-step (bukan hanya sekadar mengikuti tutorial).
-Setuju
+1. Membuat input `form` untuk menambahkan objek model pada app sebelumnya.
+   - Buat direktori templates pada direktori utama (root folder) dan buatlah sebuah berkas HTML baru bernama base.html.
+     ```python
+     {% load static %}
+     <!DOCTYPE html>
+     <html lang="en">
+       <head>
+         <meta charset="UTF-8" />
+         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+         {% block meta %} {% endblock meta %}
+       </head>
+    
+       <body>
+         {% block content %} {% endblock content %}
+       </body>
+     </html>
+     ```
+   - Buka `settings.py` yang ada pada direktori proyek toko_izaka dan tambahkan kode dibawah
+     ```python
+     ...
+     TEMPLATES = [
+         {
+             'BACKEND': 'django.template.backends.django.DjangoTemplates',
+             'DIRS': [BASE_DIR / 'templates'], # Tambahkan konten baris ini
+             'APP_DIRS': True,
+             ...
+         }
+     ]
+     ...
+     ```
+   - Buat berkas baru pada direktori `main` dengan nama `forms.py` untuk membuat struktur form yang dapat menerima data Product baru
+     ```python
+     from django.forms import ModelForm
+     from main.models import Product
+    
+     class ProductForm(ModelForm):
+         class Meta:
+             model = Product
+             fields = ["name", "price", "description", "image"]
+     ```
+   - Buka berkas `views.py` yang ada pada direktori `main` dan tambahkan
+     ```python
+     from django.shortcuts import render, redirect
+     from main.forms import ProductForm
+     from main.models import Product
+     ```
+   -  buat fungsi baru dengan nama `create_product` yang menerima parameter `request`
+     ```python
+     def create_product(request):
+     form = ProductForm(request.POST or None)
+
+     if form.is_valid() and request.method == "POST":
+         form.save()
+         return redirect('main:show_main')
+
+     context = {'form': form}
+     return render(request, "create_product.html", context)
+     ```
+   - Ubahlah fungsi `show_mai`n yang sudah ada pada berkas `views.py`
+     ```python
+     def show_main(request):
+     product_entries = Product.objects.all()
+
+     context = {
+         'product_entries': product_entries,
+     }
+
+     return render(request, "main.html", context)
+     ```
+   - Buka `urls.py` yang ada pada direktori main dan import fungsi `create_product`
+     ```python
+     from main.views import show_main, create_product'
+     ```
+   - Tambahkan path URL ke dalam variabel `urlpatterns` pada `urls.py` di `main`
 
 ### Mengakses keempat URL di poin 2 menggunakan Postman, membuat screenshot dari hasil akses URL pada Postman, dan menambahkannya ke dalam README.md
 Setuju
