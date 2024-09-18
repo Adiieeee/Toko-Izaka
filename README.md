@@ -1,5 +1,5 @@
 # Toko Izaka 🎭
-### Link Aplikasi PWS -> [LINKS 🔗](http://muhammad-adiansyah-tokoizakaa.pbp.cs.ui.ac.id/)
+### Link Aplikasi PWS -> [LINKS 🔗](https://muhammad-adiansyah-tokoizaka.pbp.cs.ui.ac.id/)
 # Tugas 2 PBP
 ### Jelaskan bagaimana cara kamu mengimplementasikan checklist di atas secara step-by-step
    **1. Membuat sebuah proyek Django baru.**
