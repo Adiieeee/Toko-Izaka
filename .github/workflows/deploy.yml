@@ -34,7 +34,7 @@ jobs:
             echo "Creating master branch"
             git branch master
           fi
-          
+
           # Switch to master branch
           git checkout master
 
