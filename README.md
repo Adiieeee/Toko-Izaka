@@ -321,4 +321,10 @@ csrf_token dalam Django diperlukan untuk melindungi aplikasi dari serangan Cross
      ```
 
 ### Mengakses keempat URL di poin 2 menggunakan Postman, membuat screenshot dari hasil akses URL pada Postman, dan menambahkannya ke dalam README.md
-Setuju
+- ![{29DFF85E-9753-4B84-BA80-85AE17C46220}](https://github.com/user-attachments/assets/c2b45c25-4b4e-480f-a857-f435e9eecd0d)
+- ![{DEE29739-3820-4C95-8538-3187A5DD0C07}](https://github.com/user-attachments/assets/5b1bae5e-f6f9-46b9-bfe1-c766e02f2381)
+- ![{8230CE7D-0EC2-4E99-8005-416735E489D5}](https://github.com/user-attachments/assets/44a22d48-2f9a-4671-b7f9-e955c9da3167)
+- ![{B71A640F-E8E1-4F3D-A74B-B9A72B13AD58}](https://github.com/user-attachments/assets/03a25d64-35db-41d4-a4c9-a0330dfbac40)
+
+
+
