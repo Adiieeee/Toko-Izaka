@@ -505,30 +505,71 @@ Django mengingat pengguna yang telah login menggunakan sesi berbasis cookie. Ket
   
       context = {'form': form}
       return render(request, "create_product.html", context)
-      ```
-    - Ubah value dari `product_entries` dan `context` pada fungsi `show_main`
-      ```python
-      def show_main(request):
-        product_entries = Product.objects.filter(user=request.user)
+    ```
+  - Ubah value dari `product_entries` dan `context` pada fungsi `show_main`
+    ```python
+    def show_main(request):
+      product_entries = Product.objects.filter(user=request.user)
     
-        context = {
-            'name': request.user.username,
-      ...
+      context = {
+        'name': request.user.username,
+    ...
       ```
-    - Simpan semua perubahan, dan lakukan migrasi model dengan python `manage.py makemigrations`
-    - Pilih `1` untuk menetapkan default value untuk field user pada semua row yang telah dibuat pada database.
-      ![{68FC8371-520F-40F3-9768-CE2ECE7F69CE}](https://github.com/user-attachments/assets/61a349d3-6927-422c-b940-bc972d30079f)
-    - Ketik angka 1 lagi untuk menetapkan user dengan ID 1
-      ![{9BD578F5-6D72-469E-91A5-B83C02ABBCE8}](https://github.com/user-attachments/assets/8bed1803-acae-4404-94cd-6df05a1a6fa1)
-    - Lakukan `python manage.py migrate` untuk mengaplikasikan migrasi yang dilakukan pada poin sebelumnya.
-    - tambahkan sebuah import baru pada `settings.py` yang ada pada subdirektori `toko_izaka`
-      ```python
-      import os
-      ```
-    - Kemudian, ganti variabel `DEBUG` dari berkas `settings.py`
-      ```python
-      PRODUCTION = os.getenv("PRODUCTION", False)
-      DEBUG = not PRODUCTION
-      ```
+  - Simpan semua perubahan, dan lakukan migrasi model dengan python `manage.py makemigrations`
+  - Pilih `1` untuk menetapkan default value untuk field user pada semua row yang telah dibuat pada database.
+    ![{68FC8371-520F-40F3-9768-CE2ECE7F69CE}](https://github.com/user-attachments/assets/61a349d3-6927-422c-b940-bc972d30079f)
+  - Ketik angka 1 lagi untuk menetapkan user dengan ID 1
+    ![{9BD578F5-6D72-469E-91A5-B83C02ABBCE8}](https://github.com/user-attachments/assets/8bed1803-acae-4404-94cd-6df05a1a6fa1)
+  - Lakukan `python manage.py migrate` untuk mengaplikasikan migrasi yang dilakukan pada poin sebelumnya.
+  - tambahkan sebuah import baru pada `settings.py` yang ada pada subdirektori `toko_izaka`
+    ```python
+    import os
+    ```
+  - Kemudian, ganti variabel `DEBUG` dari berkas `settings.py`
+    ```python
+    PRODUCTION = os.getenv("PRODUCTION", False)
+    DEBUG = not PRODUCTION
+    ```
     
   **4. Menampilkan detail informasi pengguna yang sedang logged in seperti username dan menerapkan cookies seperti last login pada halaman utama aplikasi.**
+  - Buka kembali `views.py` yang ada pada subdirektori `main`
+    ```python
+    import datetime
+    from django.http import HttpResponseRedirect
+    from django.urls import reverse
+    ```
+  - Pada fungsi `login_user`, kita akan menambahkan fungsionalitas menambahkan cookie yang bernama `last_login`
+    ```python
+    ...
+    if form.is_valid():
+        user = form.get_user()
+        login(request, user)
+        response = HttpResponseRedirect(reverse("main:show_main"))
+        response.set_cookie('last_login', str(datetime.datetime.now()))
+        return response
+    ...
+    ```
+  - Pada fungsi `show_main`, tambahkan potongan kode:
+    ```python
+    context = {
+        'name': request.user.username,
+        'product_entries': product_entries,
+        'last_login': request.COOKIES['last_login'],
+    }
+    ```
+  - Ubah fungsi `logout_user` menjadi seperti potongan kode berikut.
+    ```python
+    def logout_user(request):
+      logout(request)
+      response = HttpResponseRedirect(reverse('main:login'))
+      response.delete_cookie('last_login')
+      return response
+    ```
+  - Buka berkas `main.html` dan tambahkan potongan kode berikut
+    ```python
+    ...
+    <h4>User : {{ user.username }}</h4>
+    ...
+    <h5>Sesi terakhir login: {{ last_login }}</h5>
+    ...
+    ```
