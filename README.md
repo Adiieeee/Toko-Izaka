@@ -478,6 +478,13 @@ Django mengingat pengguna yang telah login menggunakan sesi berbasis cookie. Ket
     ```
     
   **2. Membuat dua akun pengguna dengan masing-masing tiga dummy data menggunakan model yang telah dibuat pada aplikasi sebelumnya untuk setiap akun di lokal.**
+  - saat di login screen pencet Register
+  - isi username dan password sesuai kriteria dan setelah submit akun akan terbuat
+  - lakukan langkah diatas sebanyak 2x
+  - masukan tiga dummy data dengan memencet tombol tambahkan product
+  - masukan nama, price, description, dan imagenya lalu tambahkan product
+  - lakukan langkah diatas sebanyak 3x
+  Meski sudah membuat 3 akun tapi karena kita belum menghubungkan product dengan user maka semua user mempunyai product yang sama.
 
   **3. Menghubungkan model Product dengan User.**
   - Buka `models.py` yang ada pada subdirektori `main` dan tambahkan kode berikut:
