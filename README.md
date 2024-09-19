@@ -339,5 +339,141 @@ Setuju
 Authentication dan authorization adalah dua konsep keamanan yang saling berkaitan dalam Django. Authentication adalah proses verifikasi identitas pengguna. Ini memastikan bahwa pengguna adalah siapa yang mereka klaim dengan memeriksa kredensial seperti nama pengguna dan kata sandi. Authorization, di sisi lain, adalah proses menentukan apa yang diizinkan dilakukan oleh pengguna yang telah terautentikasi. Ini mengontrol akses ke sumber daya dan tindakan berdasarkan peran atau izin pengguna.Django mengimplementasikan kedua konsep ini melalui sistem authentication yang terintegrasi. Django menyediakan model User yang menyimpan informasi pengguna dan menangani proses login dan logout. Untuk authentication, Django menggunakan middleware AuthenticationMiddleware yang mengasosiasikan pengguna dengan setiap permintaan menggunakan sesi. Untuk authorization, Django menggunakan sistem izin yang memungkinkan Anda menetapkan izin spesifik ke pengguna atau grup pengguna. Izin ini dapat digunakan untuk mengontrol akses ke view atau tindakan tertentu dalam aplikasi.
 
 ### Bagaimana Django mengingat pengguna yang telah login? Jelaskan kegunaan lain dari cookies dan apakah semua cookies aman digunakan?
+Django mengingat pengguna yang telah login menggunakan sesi berbasis cookie. Ketika pengguna berhasil login, Django membuat sesi baru dan menyimpan ID sesi dalam cookie di browser pengguna. Setiap kali pengguna mengirimkan permintaan (request) ke server setelah login, browser secara otomatis menyertakan cookie ini. Django kemudian memeriksa ID sesi di cookie untuk mendapatkan informasi tentang pengguna yang login dan mempertahankan status autentikasi mereka selama sesi berlangsung. Kegunaan lain cookies salah satunya adalah Pelacakan preferensi pengguna, Analisis dan pelacakan, Iklan yang dipersonalisasi. Tidak semua cookies aman digunakan, dan keamanan cookie bergantung pada cara pengaturannya. Cookies yang tidak dikonfigurasi dengan benar dapat menimbulkan risiko keamanan. Misalnya, jika cookie berisi informasi sensitif seperti token autentikasi dan tidak diatur sebagai HttpOnly, maka JavaScript yang berbahaya di browser bisa mencurinya melalui serangan XSS (Cross-Site Scripting).
 
+### Jelaskan bagaimana cara kamu mengimplementasikan checklist di atas secara step-by-step
+   **1. Mengimplementasikan fungsi registrasi, login, dan logout untuk memungkinkan pengguna untuk mengakses aplikasi sebelumnya dengan lancar.**
+   - Aktifkan virtual environment terlebih dahulu pada terminal.
+   - Buka `views.py` yang ada pada subdirektori `main` pada proyek kamu.
+     ```python
+     from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
+     from django.contrib import messages
+     from django.contrib.auth import authenticate, login, logout
+     ```
+   - Tambahkan fungsi `register`, `login_user`, `logout` di bawah ini ke dalam `views.py`
+     ```python
+     def register(request):
+     form = UserCreationForm()
 
+     if request.method == "POST":
+         form = UserCreationForm(request.POST)
+         if form.is_valid():
+             form.save()
+             messages.success(request, 'Your account has been successfully created!')
+             return redirect('main:login')
+     context = {'form':form}
+     return render(request, 'register.html', context)
+     ```
+     ```python
+     def login_user(request):
+        if request.method == 'POST':
+           form = AuthenticationForm(data=request.POST)
+    
+           if form.is_valid():
+                 user = form.get_user()
+                 login(request, user)
+                 return redirect('main:show_main')
+    
+        else:
+           form = AuthenticationForm(request)
+        context = {'form': form}
+        return render(request, 'login.html', context)
+     ```
+     ```python
+     def logout_user(request):
+         logout(request)
+         return redirect('main:login')
+     ```
+   - Buatlah berkas HTML baru dengan nama `register.html` pada direktori `main/template`
+     ```python
+     {% extends 'base.html' %}
+
+     {% block meta %}
+     <title>Register</title>
+     {% endblock meta %}
+    
+     {% block content %}
+    
+     <div class="login">
+       <h1>Register</h1>
+    
+       <form method="POST">
+         {% csrf_token %}
+         <table>
+           {{ form.as_table }}
+           <tr>
+             <td></td>
+             <td><input type="submit" name="submit" value="Daftar" /></td>
+           </tr>
+         </table>
+       </form>
+    
+      {% if messages %}
+      <ul>
+        {% for message in messages %}
+        <li>{{ message }}</li>
+        {% endfor %}
+       </ul>
+       {% endif %}
+     </div>
+    
+     {% endblock content %}
+     ```
+
+  - Buatlah berkas HTML baru dengan nama `login.html` pada direktori `main/templates`
+    ```python
+    {% extends 'base.html' %}
+
+    {% block meta %}
+    <title>Login</title>
+    {% endblock meta %}
+    
+    {% block content %}
+    <div class="login">
+      <h1>Login</h1>
+    
+      <form method="POST" action="">
+        {% csrf_token %}
+        <table>
+          {{ form.as_table }}
+          <tr>
+            <td></td>
+            <td><input class="btn login_btn" type="submit" value="Login" /></td>
+          </tr>
+        </table>
+      </form>
+    
+      {% if messages %}
+      <ul>
+        {% for message in messages %}
+        <li>{{ message }}</li>
+        {% endfor %}
+      </ul>
+      {% endif %} Don't have an account yet?
+      <a href="{% url 'main:register' %}">Register Now</a>
+    </div>
+    
+    {% endblock content %}
+    ```
+  - Bukalah berkas `main.html` yang ada pada direktori `main/templates` dan tambahkan potongan kode di bawah ini
+    ```python
+    ...
+    <a href="{% url 'main:logout' %}">
+      <button>Logout</button>
+    </a>
+    ...
+    ```
+  - Buka `urls.py` yang ada pada subdirektori `main` dan impor fungsi yang sudah kamu buat tadi.
+    ```python
+    from main.views import register, login_user, logout_user
+    ```
+  - Tambahkan path url ke dalam `urlpatterns`
+    ```python
+        urlpatterns = [
+        ...
+        path('register/', register, name='register'),
+        path('login/', login_user, name='login'),
+        path('logout/', logout_user, name='logout'),
+    ]
+    ```
+  - 
