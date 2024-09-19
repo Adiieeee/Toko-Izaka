@@ -104,7 +104,7 @@
 {% block content %}
     <div class="container">
         <h1>Toko Izaka</h1>
-        <h4>Nama: Muhammad Adiansyah | Kelas: PBP D</h4>
+        <h4>User : {{ user.username }}</h4>
 
         {% if not product_entries %}
             <p>Belum ada data produk</p>
@@ -130,5 +130,10 @@
         <a href="{% url 'main:create_product' %}">
             <button>Add New Product</button>
         </a>
+        <a href="{% url 'main:logout' %}">
+            <button>Logout</button>
+        </a>
+
+        <h5>Sesi terakhir login: {{ last_login }}</h5>
     </div>
 {% endblock content %}
