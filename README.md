@@ -333,7 +333,20 @@ csrf_token dalam Django diperlukan untuk melindungi aplikasi dari serangan Cross
 Dalam Django, `HttpResponseRedirect` dan `redirect` digunakan untuk mengarahkan pengguna ke URL lain. `HttpResponseRedirect` adalah subclass dari `HttpResponse` yang mengarahkan pengguna ke URL tertentu biasanya digunakan dengan URL absolut sehingga lebih manual dan cocok jika kita memerlukan kontrol lebih pada pengolahan URL. redirect adalah fungsi shortcut yang lebih fleksibel dan mudah digunakan, yang dapat menerima berbagai jenis argumen seperti URL absolut atau relatif, nama view, atau objek model. Dengan redirect(), kita dapat melakukan pengalihan dengan lebih cepat dan mudah tanpa harus menulis URL secara manual.
 
 ### Jelaskan cara kerja penghubungan model `MoodEntry` dengan `User`!
-Setuju
+model `MoodEntry` dapat dihubungkan dengan `User` dengan menggunakan **ForeignKey**. dengan ini maka setiap 'MoodEntry' akan terhubung dengan tepat satu pengguna yang sedang login dan hanya akan terhubung ke user yang sesuai.
+```python
+from django.db import models
+from django.contrib.auth.models import User
+import uuid
+
+class Product(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    name = models.CharField(max_length=255)
+    price = models.IntegerField()
+    description = models.TextField()
+    image = models.URLField(max_length=200, null=True, blank=True)
+```
 
 ### Apa perbedaan antara authentication dan authorization, apakah yang dilakukan saat pengguna login? Jelaskan bagaimana Django mengimplementasikan kedua konsep tersebut.
 Authentication dan authorization adalah dua konsep keamanan yang saling berkaitan dalam Django. Authentication adalah proses verifikasi identitas pengguna. Ini memastikan bahwa pengguna adalah siapa yang mereka klaim dengan memeriksa kredensial seperti nama pengguna dan kata sandi. Authorization, di sisi lain, adalah proses menentukan apa yang diizinkan dilakukan oleh pengguna yang telah terautentikasi. Ini mengontrol akses ke sumber daya dan tindakan berdasarkan peran atau izin pengguna.Django mengimplementasikan kedua konsep ini melalui sistem authentication yang terintegrasi. Django menyediakan model User yang menyimpan informasi pengguna dan menangani proses login dan logout. Untuk authentication, Django menggunakan middleware AuthenticationMiddleware yang mengasosiasikan pengguna dengan setiap permintaan menggunakan sesi. Untuk authorization, Django menggunakan sistem izin yang memungkinkan Anda menetapkan izin spesifik ke pengguna atau grup pengguna. Izin ini dapat digunakan untuk mengontrol akses ke view atau tindakan tertentu dalam aplikasi.
