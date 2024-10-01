@@ -608,7 +608,8 @@ Karena responsive design adalah pengembangan web yang membuat situs web dapat me
 **Contoh Aplikasi yang sudah menerapkan responsive design :**
 - **Amazon** : Website ini dapat beradaptasi dengan berbagai ukuran layar, menawarkan pengalaman berbelanja yang mulus di perangkat seluler dan desktop.
 - **Google** : Baik Google Search maupun Gmail memiliki tampilan yang sangat responsif, sehingga dapat diakses dengan nyaman di berbagai perangkat.
-**Contoh Aplikasi yang belum menerapkan responsive design : **
+  
+**Contoh Aplikasi yang belum menerapkan responsive design :**
 - **BBC News** : pada beberapa halaman tertentu yang lebih tua mungkin memiliki tata letak tetap dan tidak menyesuaikan ukuran layar perangkat dengan baik.
 
 ### Jelaskan perbedaan antara margin, border, dan padding, serta cara untuk mengimplementasikan ketiga hal tersebut!
@@ -635,9 +636,12 @@ garis yang mengelilingi padding dan konten elemen. Border dapat memiliki warna, 
 
 ### Jelaskan konsep flex box dan grid layout beserta kegunaannya!
 **- Konsep Flex Box**
+
 Flexbox adalah model layout yang memungkinkan distribusi ruang dan penataan elemen dalam satu dimensi (baris atau kolom). Elemen yang menggunakan flexbox dapat menyesuaikan ukuran dan posisi secara otomatis berdasarkan ruang yang tersedia, membuatnya sangat berguna untuk tata letak responsif.
 Kegunaan: Pengaturan Elemen dalam Baris atau Kolom, Distribusi Ruang, Responsif
+
 **- Konsep Grid Layout**
+
 Grid Layout adalah model layout dua dimensi yang memungkinkan penataan elemen dalam baris dan kolom. Grid memberikan kontrol lebih besar terhadap tata letak, termasuk ukuran dan posisi elemen di berbagai ukuran layar.
 Kegunaan: Tata Letak Kompleks, Kontrol yang Lebih Baik, Responsif
 
