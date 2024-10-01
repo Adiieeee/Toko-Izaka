@@ -596,14 +596,14 @@ Django mengingat pengguna yang telah login menggunakan sesi berbasis cookie. Ket
 
 
 
-#Tugas 5 PBP
-###Jika terdapat beberapa CSS selector untuk suatu elemen HTML, jelaskan urutan prioritas pengambilan CSS selector tersebut!
+# Tugas 5 PBP
+### Jika terdapat beberapa CSS selector untuk suatu elemen HTML, jelaskan urutan prioritas pengambilan CSS selector tersebut!
 - Inline styles: Memiliki prioritas tertinggi, misalnya `<div style="color: red;">`.
 - ID selectors: Memiliki prioritas lebih tinggi daripada class dan tag, misalnya `#myId`.
 - Class selectors: Memiliki prioritas lebih tinggi daripada tag, misalnya `.myClass`.
 - Element Selectors: Prioritas Rendah, paling umum, tetapi juga paling tidak spesifik, misalnya `<p>Ini adalah paragraf</p>`.
 
-###Mengapa responsive design menjadi konsep yang penting dalam pengembangan aplikasi web? Berikan contoh aplikasi yang sudah dan belum menerapkan responsive design!
+### Mengapa responsive design menjadi konsep yang penting dalam pengembangan aplikasi web? Berikan contoh aplikasi yang sudah dan belum menerapkan responsive design!
 Karena responsive design adalah pengembangan web yang membuat situs web dapat menyesuaikan tampilannya secara otomatis sesuai dengan ukuran layar perangkat yang digunakan. Ini berarti, baik pengguna mengakses situs web melalui desktop, laptop, tablet, atau smartphone, mereka akan tetap mendapatkan pengalaman pengguna yang optimal dan konsisten.
 **Contoh Aplikasi yang sudah menerapkan responsive design :**
 - **Amazon** : Website ini dapat beradaptasi dengan berbagai ukuran layar, menawarkan pengalaman berbelanja yang mulus di perangkat seluler dan desktop.
@@ -611,7 +611,7 @@ Karena responsive design adalah pengembangan web yang membuat situs web dapat me
 **Contoh Aplikasi yang belum menerapkan responsive design : **
 - **BBC News** : pada beberapa halaman tertentu yang lebih tua mungkin memiliki tata letak tetap dan tidak menyesuaikan ukuran layar perangkat dengan baik.
 
-###Jelaskan perbedaan antara margin, border, dan padding, serta cara untuk mengimplementasikan ketiga hal tersebut!
+### Jelaskan perbedaan antara margin, border, dan padding, serta cara untuk mengimplementasikan ketiga hal tersebut!
 **- Margin**
 Ruang di luar elemen. Mengatur jarak antara elemen dengan elemen lainnya. Contoh :
 ```python
@@ -633,7 +633,7 @@ garis yang mengelilingi padding dan konten elemen. Border dapat memiliki warna, 
 }
 ```
 
-###Jelaskan konsep flex box dan grid layout beserta kegunaannya!
+### Jelaskan konsep flex box dan grid layout beserta kegunaannya!
 **- Konsep Flex Box**
 Flexbox adalah model layout yang memungkinkan distribusi ruang dan penataan elemen dalam satu dimensi (baris atau kolom). Elemen yang menggunakan flexbox dapat menyesuaikan ukuran dan posisi secara otomatis berdasarkan ruang yang tersedia, membuatnya sangat berguna untuk tata letak responsif.
 Kegunaan: Pengaturan Elemen dalam Baris atau Kolom, Distribusi Ruang, Responsif
@@ -641,5 +641,5 @@ Kegunaan: Pengaturan Elemen dalam Baris atau Kolom, Distribusi Ruang, Responsif
 Grid Layout adalah model layout dua dimensi yang memungkinkan penataan elemen dalam baris dan kolom. Grid memberikan kontrol lebih besar terhadap tata letak, termasuk ukuran dan posisi elemen di berbagai ukuran layar.
 Kegunaan: Tata Letak Kompleks, Kontrol yang Lebih Baik, Responsif
 
-###Jelaskan bagaimana cara kamu mengimplementasikan checklist di atas secara step-by-step (bukan hanya sekadar mengikuti tutorial)!
+### Jelaskan bagaimana cara kamu mengimplementasikan checklist di atas secara step-by-step (bukan hanya sekadar mengikuti tutorial)!
 oa
