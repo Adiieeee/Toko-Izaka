@@ -1,139 +1,42 @@
 {% extends 'base.html' %}
+{% load static %}
+
 {% block meta %}
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Toko Izaka</title>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
-    <style>
-        body {
-            font-family: 'Montserrat', sans-serif;
-            background-color: #f4f4f9;
-            color: #333;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            background-image: url('background-image.jpg');
-            background-size: cover;
-            background-position: center;
-        }
-        .container {
-            max-width: 800px;
-            width: 90%;
-            padding: 20px;
-            background-color: #fff;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-            border-radius: 15px;
-            text-align: center;
-            animation: fadeIn 1s ease-in-out;
-        }
-        h1 {
-            font-size: 36px;
-            color: #333;
-            margin-bottom: 0px;
-        }
-        h4 {
-            font-size: 16px;
-            color: #555;
-            margin-bottom: 25px;
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-bottom: 20px;
-        }
-        table, th, td {
-            border: 1px solid #ddd;
-        }
-        th, td {
-            padding: 12px;
-            text-align: left;
-        }
-        th {
-            background-color: #f2f2f2;
-            font-weight: 700;
-        }
-        tr:hover {
-            background-color: #f9f9f9;
-        }
-        img {
-            border-radius: 10px;
-            width: 100px;
-            height: auto;
-            transition: transform 0.3s ease;
-        }
-        img:hover {
-            transform: scale(1.05);
-        }
-        button {
-            background-color: #333;
-            color: #fff;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
-        button:hover {
-            background-color: #555;
-        }
-        @media (max-width: 768px) {
-            table {
-                font-size: 14px;
-            }
-            button {
-                width: 100%;
-                margin-top: 10px;
-            }
-        }
-        @keyframes fadeIn {
-            0% {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            100% {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-    </style>
+<title>Toko Izaka</title>
 {% endblock meta %}
-
 {% block content %}
-    <div class="container">
-        <h1>Toko Izaka</h1>
-        <h4>User : {{ user.username }}</h4>
-
-        {% if not product_entries %}
-            <p>Belum ada data produk</p>
-        {% else %}
-            <table>
-                <tr>
-                    <th>Name</th>
-                    <th>Price</th>
-                    <th>Description</th>
-                    <th>Image</th>
-                </tr>
-                {% for product_entry in product_entries %}
-                <tr>
-                    <td>{{ product_entry.name }}</td>
-                    <td>{{ product_entry.price }}</td>
-                    <td>{{ product_entry.description }}</td>
-                    <td><img src="{{ product_entry.image.url }}" alt="Product Image"></td>
-                </tr>
-                {% endfor %}
-            </table>
-        {% endif %}
-
-        <a href="{% url 'main:create_product' %}">
-            <button>Add New Product</button>
-        </a>
-        <a href="{% url 'main:logout' %}">
-            <button>Logout</button>
-        </a>
-
-        <h5>Sesi terakhir login: {{ last_login }}</h5>
+{% include 'navbar.html' %}
+<div class="overflow-x-hidden px-4 md:px-8 pb-8 pt-24 min-h-screen bg-gray-100 flex flex-col">
+  <div class="p-0 mb-0 relative">
+    <div class="h-full w-full py-6  absolute top-0 left-0 z-20 md:hidden flex ">
+      <div class="h-full min-w-4 bg-indigo-700 mx-auto"></div>
     </div>
+  </div>
+  
+  <div class="px-3 mb-0">
+    <div class="flex justify-end mb-4">
+      <a href="{% url 'main:create_product' %}" class="bg-black hover:bg-gray-800 text-white font-bold py-2 px-4 rounded-lg transition duration-300 ease-in-out transform hover:-translate-y-1 hover:scale-105">
+          Add New Product
+      </a>
+    </div>
+  </div>
+  
+  {% if not product_entries %}
+  <div class="flex flex-col items-center justify-center min-h-[24rem] p-6">
+    <img src="{% static 'image/orang-binggung.png' %}" alt="Sad face" class="w-64 h-64 mb-4"/>
+    <p class="text-center text-gray-600 mt-4">Belum ada data produk</p>
+  </div>
+  {% else %}
+  <div class="columns-1 sm:columns-2 lg:columns-3 gap-6 space-y-6 w-full">
+    {% for product_entry in product_entries %}
+    {% include 'product_detail.html' with product_entry=product_entry %}
+    {% endfor %}
+  </div>
+  {% endif %}
+  <div class="flex justify-start mt-5 mb-0">
+    {% comment %} <div class="flex rounded-md items-center bg-black py-2 px-4"> {% endcomment %}
+      <h1 class="text-black text-center">Last Login: {{last_login}}</h1>
+    {% comment %} </div> {% endcomment %}
+  </div>
+</div>
 {% endblock content %}

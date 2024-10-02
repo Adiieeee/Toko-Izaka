@@ -8,4 +8,9 @@ class Product(models.Model):
     name = models.CharField(max_length=255)
     price = models.IntegerField()
     description = models.TextField()
-    image = models.URLField(max_length=200, null=True, blank=True)
+    image = models.ImageField()
+
+# class Person(models.Model):
+#     name = models.CharField(max_length=255)
+#     age = models.IntegerField()
+#     is_happy = models.BooleanField()

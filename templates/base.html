@@ -5,9 +5,15 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     {% block meta %} {% endblock meta %}
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="{% static 'css/global.css' %}"/>
   </head>
-
   <body>
     {% block content %} {% endblock content %}
+    <footer class="footer mt-auto py-3 bg-light">
+      <div class="text-center">
+        <span class="text-muted">© 2024 Muhammad Adiansyah | 2306244980 | PBP D. All rights reserved.</span>
+      </div>
+    </footer>
   </body>
 </html>

@@ -2,7 +2,7 @@ from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, reverse
 from main.forms import ProductForm
 from main.models import Product
 from django.http import HttpResponse
@@ -16,6 +16,9 @@ def show_main(request):
     product_entries = Product.objects.filter(user=request.user)
 
     context = {
+        'npm' : "2306244980",
+        'nama' : "Muhammad Adiansyah",
+        'kelas' : "PBP D",
         'name': request.user.username,
         'product_entries': product_entries,
         'last_login': request.COOKIES['last_login'],
@@ -24,7 +27,7 @@ def show_main(request):
     return render(request, "main.html", context)
 
 def create_product(request):
-    form = ProductForm(request.POST or None)
+    form = ProductForm(request.POST or None, request.FILES)
 
     if form.is_valid() and request.method == "POST":
         product_entry = form.save(commit=False)
@@ -68,6 +71,29 @@ def logout_user(request):
     response = HttpResponseRedirect(reverse('main:login'))
     response.delete_cookie('last_login')
     return response
+
+def edit_product(request, id):
+    # Get mood entry berdasarkan id
+    product_entries = Product.objects.get(pk = id)
+
+    # Set mood entry sebagai instance dari form
+    form = ProductForm(request.POST or None, instance=product_entries)
+
+    if form.is_valid() and request.method == "POST":
+        # Simpan form dan kembali ke halaman awal
+        form.save()
+        return HttpResponseRedirect(reverse('main:show_main'))
+
+    context = {'form': form}
+    return render(request, "edit_product.html", context)
+
+def delete_product(request, id):
+    # Get mood berdasarkan id
+    produk_entries = Product.objects.get(pk = id)
+    # Hapus mood
+    produk_entries.delete()
+    # Kembali ke halaman awal
+    return HttpResponseRedirect(reverse('main:show_main'))
 
 def show_xml(request):
     data = Product.objects.all()
