@@ -615,20 +615,20 @@ Karena responsive design adalah pengembangan web yang membuat situs web dapat me
 ### Jelaskan perbedaan antara margin, border, dan padding, serta cara untuk mengimplementasikan ketiga hal tersebut!
 **- Margin**
 Ruang di luar elemen. Mengatur jarak antara elemen dengan elemen lainnya. Contoh :
-```python
+```css
 .container {
   margin: 20px;
 }
 ```
 **- Border**
 garis yang mengelilingi padding dan konten elemen. Border dapat memiliki warna, ketebalan, dan gaya. Contoh :
-```python
+```css
 .container {
   border: 2px solid black;
 }
 ```
 **- Padding**
-```python
+```css
 .container {
   padding: 10px;
 }
@@ -646,4 +646,407 @@ Grid Layout adalah model layout dua dimensi yang memungkinkan penataan elemen da
 Kegunaan: Tata Letak Kompleks, Kontrol yang Lebih Baik, Responsif
 
 ### Jelaskan bagaimana cara kamu mengimplementasikan checklist di atas secara step-by-step (bukan hanya sekadar mengikuti tutorial)!
-oa
+**1. Implementasikan fungsi untuk menghapus dan mengedit product.**
+- Buka `views.py` yang ada pada subdirektori `main` dan buat fungsi baru bernama `edit_product` dan `delete_product`
+  ```python
+  def edit_product(request, id):
+    # Get mood entry berdasarkan id
+    product_entries = Product.objects.get(pk = id)
+
+    # Set mood entry sebagai instance dari form
+    form = ProductForm(request.POST or None, instance=product_entries)
+
+    if form.is_valid() and request.method == "POST":
+        # Simpan form dan kembali ke halaman awal
+        form.save()
+        return HttpResponseRedirect(reverse('main:show_main'))
+
+    context = {'form': form}
+    return render(request, "edit_product.html", context)
+  ```
+  ```python
+  def delete_product(request, id):
+    # Get mood berdasarkan id
+    produk_entries = Product.objects.get(pk = id)
+    # Hapus mood
+    produk_entries.delete()
+    # Kembali ke halaman awal
+    return HttpResponseRedirect(reverse('main:show_main'))
+  ```
+- Tambahkan import pada file `views.py`
+  ```python
+  from django.shortcuts import .., reverse
+  from django.http import .., HttpResponseRedirect
+  from main.views import delete_mood
+  ```
+- Buatlah berkas HTML baru dengan nama `edit_product.html` pada subdirektori `main/templates`
+  ```html
+  {% extends 'base.html' %}
+  {% load static %}
+  {% block meta %}
+  <title>Edit Product</title>
+  {% endblock meta %}
+  
+  {% block content %}
+  {% include 'navbar.html' %}
+  <div class="flex flex-col min-h-screen bg-gray-100">
+    <div class="container mx-auto px-4 py-8 mt-16 max-w-xl">
+      <h1 class="text-3xl font-bold text-center mb-8 text-black">Edit Product</h1>
+    
+      <div class="bg-white rounded-lg p-6 form-style">
+        <form method="POST" class="space-y-6" enctype="multipart/form-data>
+            {% csrf_token %}
+            {% for field in form %}
+                <div class="flex flex-col">
+                    <label for="{{ field.id_for_label }}" class="mb-2 font-semibold text-gray-700">
+                        {{ field.label }}
+                    </label>
+                    <div class="w-full">
+                        {{ field }}
+                    </div>
+                    {% if field.help_text %}
+                        <p class="mt-1 text-sm text-gray-500">{{ field.help_text }}</p>
+                    {% endif %}
+                    {% for error in field.errors %}
+                        <p class="mt-1 text-sm text-red-600">{{ error }}</p>
+                    {% endfor %}
+                </div>
+            {% endfor %}
+            <div class="flex justify-center mt-6">
+                <button type="submit" class="bg-indigo-600 text-white font-semibold px-6 py-3 rounded-lg hover:bg-indigo-700 transition duration-300 ease-in-out w-full">
+                    Edit Product
+                </button>
+            </div>
+        </form>
+    </div>
+    </div>
+  </div>
+  {% endblock %}
+  ```
+- Buka `urls.py` yang berada pada direktori `main` dan import fungsi tadi
+  ```python
+  from main.views import edit_product, delete_product
+  ```
+- Tambahkan path url ke dalam `urlpatterns`
+  ```python
+  path('edit-product/<uuid:id>', edit_product, name='edit_product'),
+  path('delete/<uuid:id>', delete_product, name='delete_product'),
+  ```
+- Buka `product_details.html` yang berada pada subdirektori `main/templates` (sekarang belum ada tapi nanti akan dibuat). Tambahkan potongan kode berikut
+  ```html
+  <div class="flex justify-between mt-2">
+      <a href="{% url 'main:edit_product' product_entry.pk %}" class="flex items-center justify-center w-10 h-10 bg-yellow-500 hover:bg-yellow-600 rounded-full shadow-md transition duration-300">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-white" viewBox="0 0 20 20" fill="currentColor">
+              <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z" />
+          </svg>
+      </a>
+      <a href="{% url 'main:delete_product' product_entry.pk %}" class="flex items-center justify-center w-10 h-10 bg-red-500 hover:bg-red-600 rounded-full shadow-md transition duration-300">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-white" viewBox="0 0 20 20" fill="currentColor">
+              <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" />
+          </svg>
+      </a>
+  </div>
+  ```
+**2. Kustomisasi desain pada template HTML yang telah dibuat pada tugas-tugas sebelumnya menggunakan CSS atau CSS framework (seperti Bootstrap, Tailwind, Bulma) dengan ketentuan sebagai berikut:**
+- Kustomisasi halaman login, register, dan tambah product semenarik mungkin.
+  **login**
+  ```html
+  {% extends 'base.html' %}
+
+  {% block meta %}
+  <title>Login</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+  h2 {
+      font-family: 'Poppins', sans-serif;
+  }
+  h3 {
+    font-family: 'Poppins', sans-serif;
+  }
+  </style>
+  {% endblock meta %}
+  
+  {% block content %}
+  <div class="min-h-screen flex items-center justify-center w-screen bg-gray-100 py-12 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-md w-full space-y-8">
+      <div>
+        <h2 class="mt-6 text-center text-black text-4xl font-extrabold text-gray-900">
+          Login
+        </h2>
+      </div>
+      <form class="mt-8 space-y-6" method="POST" action="">
+        {% csrf_token %}
+        <input type="hidden" name="remember" value="true">
+        <div class="rounded-md shadow-sm -space-y-px">
+          <div>
+            <h3>Username<h3>
+            <label for="username" class="sr-only">Enter Username</label>
+            <input id="username" name="username" type="text" required class="rounded-md appearance-none rounded-none relative block w-full px-3 py-2  border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm" placeholder="Username">
+          </div>
+        </div>
+        <div>
+          <div>
+            <h3>Password<h3>
+            <label for="password" class="sr-only">Enter Password</label>
+            <input id="password" name="password" type="password" required class="rounded-md appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm" placeholder="Password">
+          </div>
+        </div>
+  
+        <div>
+          <button type="submit" class="rounded-md group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+            Sign in
+          </button>
+        </div>
+      </form>
+  
+      {% if messages %}
+      <div class="mt-4">
+        {% for message in messages %}
+        {% if message.tags == "success" %}
+              <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative" role="alert">
+                  <span class="block sm:inline">{{ message }}</span>
+              </div>
+          {% elif message.tags == "error" %}
+              <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+                  <span class="block sm:inline">{{ message }}</span>
+              </div>
+          {% else %}
+              <div class="bg-blue-100 border border-blue-400 text-blue-700 px-4 py-3 rounded relative" role="alert">
+                  <span class="block sm:inline">{{ message }}</span>
+              </div>
+          {% endif %}
+        {% endfor %}
+      </div>
+      {% endif %}
+  
+      <div class="text-center mt-4">
+        <p class="text-sm text-black">
+          Don't have an account yet?
+          <a href="{% url 'main:register' %}" class="font-medium text-indigo-200 hover:text-indigo-300">
+            Register Now
+          </a>
+        </p>
+      </div>
+    </div>
+  </div>
+  {% endblock content %}
+  ```
+  **register**
+  ```html
+  {% extends 'base.html' %}
+
+  {% block meta %}
+  <title>Register</title>
+  {% endblock meta %}
+  
+  {% block content %}
+  <div class="min-h-screen flex items-center justify-center bg-gray-100 py-12 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-md w-full space-y-8 form-style">
+      <div>
+        <h2 class="mt-6 text-center text-3xl font-extrabold text-black">
+          Create your account
+        </h2>
+      </div>
+      <form class="mt-8 space-y-6" method="POST">
+        {% csrf_token %}
+        <input type="hidden" name="remember" value="true">
+        <div class="rounded-md shadow-sm -space-y-px">
+          {% for field in form %}
+            <div class="{% if not forloop.first %}mt-4{% endif %}">
+              <label for="{{ field.id_for_label }}" class="mb-2 font-semibold text-black">
+                {{ field.label }}
+              </label>
+              <div class="relative">
+                {{ field }}
+                <div class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
+                  {% if field.errors %}
+                    <svg class="h-5 w-5 text-red-500" fill="currentColor" viewBox="0 0 20 20">
+                      <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
+                    </svg>
+                  {% endif %}
+                </div>
+              </div>
+              {% if field.errors %}
+                {% for error in field.errors %}
+                  <p class="mt-1 text-sm text-red-600">{{ error }}</p>
+                {% endfor %}
+              {% endif %}
+            </div>
+          {% endfor %}
+        </div>
+  
+        <div>
+          <button type="submit" class="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+            Register
+          </button>
+        </div>
+      </form>
+  
+      {% if messages %}
+      <div class="mt-4">
+        {% for message in messages %}
+        <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+          <span class="block sm:inline">{{ message }}</span>
+        </div>
+        {% endfor %}
+      </div>
+      {% endif %}
+  
+      <div class="text-center mt-4">
+        <p class="text-sm text-black">
+          Already have an account?
+          <a href="{% url 'main:login' %}" class="font-medium text-indigo-200 hover:text-indigo-300">
+            Login here
+          </a>
+        </p>
+      </div>
+    </div>
+  </div>
+  {% endblock content %}
+  ```
+  **create produk**
+  ```html
+  {% extends 'base.html' %}
+  {% load static %}
+  {% block meta %}
+  <title>Create Product</title>
+  {% endblock meta %}
+  
+  {% block content %}
+  
+  <div class="flex flex-col min-h-screen bg-gray-100">
+    <div class="container mx-auto px-4 py-8 mt-16 max-w-xl">
+      <h1 class="text-3xl font-bold text-center mb-8 text-black">Create Create Product</h1>
+    
+      <div class="bg-white shadow-md rounded-lg p-6 form-style">
+        <form method="POST" class="space-y-6" enctype="multipart/form-data">
+          {% csrf_token %}
+          {% for field in form %}
+            <div class="flex flex-col">
+              <label for="{{ field.id_for_label }}" class="mb-2 font-semibold text-gray-700">
+                {{ field.label }}
+              </label>
+              <div class="w-full">
+                {{ field }}
+              </div>
+              {% if field.help_text %}
+                <p class="mt-1 text-sm text-gray-500">{{ field.help_text }}</p>
+              {% endif %}
+              {% for error in field.errors %}
+                <p class="mt-1 text-sm text-red-600">{{ error }}</p>
+              {% endfor %}
+            </div>
+          {% endfor %}
+          <div class="flex justify-center mt-6">
+            <button type="submit" class="bg-indigo-600 text-white font-semibold px-6 py-3 rounded-lg hover:bg-indigo-700 transition duration-300 ease-in-out w-full">
+              Create Product
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  
+  {% endblock %}
+  ```
+- Kustomisasi halaman daftar product menjadi lebih menarik dan responsive. Kemudian, perhatikan kondisi berikut:
+  - Jika pada aplikasi belum ada product yang tersimpan, halaman daftar product akan menampilkan gambar dan pesan bahwa belum ada product yang terdaftar.
+    ```html
+    {% if not product_entries %}
+    <div class="flex flex-col items-center justify-center min-h-[24rem] p-6">
+      <img src="{% static 'image/orang-binggung.png' %}" alt="Sad face" class="w-64 h-64 mb-4"/>
+      <p class="text-center text-gray-600 mt-4">Belum ada data produk</p>
+    </div>
+    ```
+  - Jika sudah ada product yang tersimpan, halaman daftar product akan menampilkan detail setiap product dengan menggunakan card (tidak boleh sama persis dengan desain pada Tutorial!)
+    ```html
+    {% else %}
+    <div class="columns-1 sm:columns-2 lg:columns-3 gap-6 space-y-6 w-full">
+      {% for product_entry in product_entries %}
+      {% include 'product_detail.html' with product_entry=product_entry %}
+      {% endfor %}
+    </div>
+    {% endif %}
+    ```
+    **kode untuk cardnya**
+    ```html
+    <div class="relative break-inside-avoid border rounded-lg shadow-md bg-white p-4 mb-6 transition-transform duration-300 hover:shadow-lg">
+    <div class="flex flex-col items-left">
+        <h3 class="text-2xl font-bold text-gray-800 mb-4 text-center">{{ product_entry.name }}</h3>
+        <img src="{{ product_entry.image.url }}" alt="Product Image" class="w-full h-48 object-cover rounded-md mb-4 border border-gray-300">
+        <p class="text-lg text-gray-700 mb-2 text-left">Description:</p>
+        <p class="text-gray-600 mb-2 text-left">{{ product_entry.description }}</p>
+        <p class="text-xl font-bold text-black mb-2">Price: {{ product_entry.price }}</p>
+    </div>
+    <div class="flex justify-between mt-2">
+        <a href="{% url 'main:edit_product' product_entry.pk %}" class="flex items-center justify-center w-10 h-10 bg-yellow-500 hover:bg-yellow-600 rounded-full shadow-md transition duration-300">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-white" viewBox="0 0 20 20" fill="currentColor">
+                <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z" />
+            </svg>
+        </a>
+        <a href="{% url 'main:delete_product' product_entry.pk %}" class="flex items-center justify-center w-10 h-10 bg-red-500 hover:bg-red-600 rounded-full shadow-md transition duration-300">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-white" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" />
+            </svg>
+        </a>
+    </div>
+    </div>
+    ```
+- Untuk setiap card product, buatlah dua buah button untuk mengedit dan menghapus product pada card tersebut!
+  ```html
+  <div class="flex justify-between mt-2">
+      <a href="{% url 'main:edit_product' product_entry.pk %}" class="flex items-center justify-center w-10 h-10 bg-yellow-500 hover:bg-yellow-600 rounded-full shadow-md transition duration-300">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-white" viewBox="0 0 20 20" fill="currentColor">
+              <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z" />
+          </svg>
+      </a>
+      <a href="{% url 'main:delete_product' product_entry.pk %}" class="flex items-center justify-center w-10 h-10 bg-red-500 hover:bg-red-600 rounded-full shadow-md transition duration-300">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-white" viewBox="0 0 20 20" fill="currentColor">
+              <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" />
+          </svg>
+      </a>
+  </div>
+  ```
+- Buatlah navigation bar (navbar) untuk fitur-fitur pada aplikasi yang responsive terhadap perbedaan ukuran device, khususnya mobile dan desktop.
+  ```html
+  <nav class="bg-white shadow-lg fixed top-0 left-0 z-40 w-full">
+    <div class="mx-auto flex items-center justify-between p-4">
+      <!-- Logo Section -->
+      <div class="flex items-center space-x-3">
+        <span class="text-2xl font-bold text-black">Toko Izaka</span>
+      </div>
+  
+      <div class="hidden md:flex md:items-center justify-center space-x-8">
+        <ul class="flex flex-row space-x-8">
+          <li><a href="#" class="text-gray-700 hover:text-indigo-600">Home</a></li>
+          <li><a href="#" class="text-gray-700 hover:text-indigo-600">About</a></li>
+          <li><a href="#" class="text-gray-700 hover:text-indigo-600">Services</a></li>
+          <li><a href="#" class="text-gray-700 hover:text-indigo-600">Pricing</a></li>
+          <li><a href="#" class="text-gray-700 hover:text-indigo-600">Contact</a></li>
+        </ul>
+      </div>
+  
+      <div class="hidden md:flex md:items-center space-x-4">
+        {% if user.is_authenticated %}
+          <span class="text-gray-700">Welcome, {{ user.username }}</span>
+          <a href="{% url 'main:logout' %}" class="bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-4 rounded-full transition-all duration-300">Logout</a>
+        {% else %}
+          <a href="{% url 'main:login' %}" class="bg-indigo-500 hover:bg-indigo-600 text-white font-semibold py-2 px-4 rounded-full transition-all duration-300">Login</a>
+          <a href="{% url 'main:register' %}" class="bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded-full transition-all duration-300">Register</a>
+        {% endif %}
+      </div>
+    </div>
+    <div class="mobile-menu hidden px-4 w-full md:hidden">
+    </div>
+    <script>
+      const btn = document.querySelector("button.mobile-menu-button");
+      const menu = document.querySelector(".mobile-menu");
+  
+      btn.addEventListener("click", () => {
+        menu.classList.toggle("hidden");
+      });
+    </script>
+  </nav>
+  ```
+
+  
