@@ -6,13 +6,25 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     {% block meta %} {% endblock meta %}
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://kit.fontawesome.com/11b8b18fc4.js" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="{% static 'css/global.css' %}"/>
   </head>
   <body>
     {% block content %} {% endblock content %}
-    <footer class="footer mt-auto py-3 bg-light">
-      <div class="text-center">
-        <span class="text-muted">© 2024 Muhammad Adiansyah | 2306244980 | PBP D. All rights reserved.</span>
+    <footer class="footer mt-auto py-3 bg-black">
+      <div class="mx-auto flex justify-between items-center px-4">
+        <span class="text-white">© 2024 Muhammad Adiansyah | 2306244980 | PBP D. All rights reserved.</span>
+        <div class="flex space-x-4">
+          <a href="https://www.instagram.com/adian_syh" class="text-white hover:text-gray-400">
+            <i class="fab fa-instagram"></i>
+          </a>
+          <a href="https://www.twitter.com" class="text-white hover:text-gray-400">
+            <i class="fab fa-twitter"></i>
+          </a>
+          <a href="https://www.facebook.com" class="text-white hover:text-gray-400">
+            <i class="fab fa-facebook"></i>
+          </a>
+        </div>
       </div>
     </footer>
   </body>
