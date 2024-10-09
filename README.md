@@ -1050,3 +1050,267 @@ Kegunaan: Tata Letak Kompleks, Kontrol yang Lebih Baik, Responsif
   ```
 
   
+
+# Tugas 6 PBP
+### Jelaskan manfaat dari penggunaan JavaScript dalam pengembangan aplikasi web!
+- **Interaktivitas yang tinggi**
+  - **Responsif terhadap pengguna**
+    JavaScript memungkinkan elemen-elemen dalam halaman web merespons aksi pengguna secara real-time, seperti ketika pengguna mengklik tombol, mengarahkan kursor, atau mengisi formulir.
+  - **Pengalaman pengguna yang lebih baik**
+    
+    Dengan interaktivitas yang tinggi, pengguna merasa lebih terlibat dan terhubung dengan aplikasi web.
+- **Pengolahan data secara real-time**
+  
+  Dengan JavaScript, aplikasi dapat menangani data pengguna secara langsung, seperti validasi formulir atau menampilkan hasil secara langsung.
+- **Kompabilitas lintas platform**
+  
+  JavaScript dapat dijalankan di berbagai peramban dan platform, memudahkan pengembang untuk membuat aplikasi web yang konsisten.
+- **Pemrograman Asinkron**
+  
+  Dengan AJAX dan Fetch API, memungkinkan aplikasi untuk berkomunikasi dengan server tanpa perlu memuat ulang halaman.
+
+
+### Jelaskan fungsi dari penggunaan `await` ketika kita menggunakan `fetch()`! Apa yang akan terjadi jika kita tidak menggunakan `await`?
+Fungsi penggunaan await saat menggunakan fetch() adalah untuk menunggu sampai permintaan HTTP selesai dan menerima responsnya sebelum melanjutkan eksekusi kode. fetch() adalah operasi asinkron, dan await memastikan bahwa hasil dari fetch() dapat diproses setelah respons diterima.
+Jika tidak menggunakan await, JavaScript akan melanjutkan eksekusi kode berikutnya tanpa menunggu hasil fetch(), yang bisa menyebabkan kesalahan karena data mungkin belum tersedia saat kode mencoba menggunakannya. Ini dapat menghasilkan nilai Promise yang belum terselesaikan.
+
+
+### Mengapa kita perlu menggunakan decorator `csrf_exempt` pada view yang akan digunakan untuk AJAX `POST`?
+`csrf_exempt` digunakan untuk menghindari pemeriksaan Cross-Site Request Forgery (CSRF) pada view tertentu. Tanpa decorator ini, permintaan AJAX POST dari halaman web yang sama akan ditolak jika tidak memiliki token CSRF yang valid. Ini adalah langkah keamanan untuk melindungi dari serangan CSRF
+
+
+### Pada tutorial PBP minggu ini, pembersihan data input pengguna dilakukan di belakang (backend) juga. Mengapa hal tersebut tidak dilakukan di frontend saja?
+Karena secara frontend hanya berpengaruh kepada tampilan dan uinya saja tetapi data di databasenya masih ada, oleh karena itu perlu dibersihkan di backend juga untuk memastikan datanya beneran tidak ada
+
+### Jelaskan bagaimana cara kamu mengimplementasikan checklist di atas secara step-by-step (bukan hanya sekadar mengikuti tutorial)!
+**1. Ubahlah kode cards data mood agar dapat mendukung AJAX GET.**
+- Bukalah berkas `views.py` dan **hapus dua baris** berikut.
+  ```python
+   mood_entries = MoodEntry.objects.filter(user=request.user)
+  'mood_entries': mood_entries,
+  ```
+- Bukalah berkas `views.py` dan ubahlah baris pertama views untuk `show_json` dan `show_xml`
+   ```python
+   data = MoodEntry.objects.filter(user=request.user)
+   ```
+- Bukalah berkas `main.html.` Hapus bagian block conditional `product_entries`
+- tambahkan potongan kode ini di tempat yang sama.
+  ```html
+  <div id="product_entry_cards"></div>
+  ```
+- Buatlah block `<script>` di bagian bawah berkas kamu (sebelum `{% endblock content %}`)
+   ```html
+    async function getProductEntries(){
+       return fetch("{% url 'main:show_json' %}").then((res) => res.json())
+     }
+   ```
+- Buatlah **fungsi baru** pada block `<script>` dengan nama `refreshProductEntries`
+  ```html
+     async function refreshProductEntries() {
+     document.getElementById("product_entry_cards").innerHTML = "";
+     document.getElementById("product_entry_cards").className = "";
+     const productEntries = await getProductEntries();
+     let htmlString = "";
+     let classNameString = "";
+
+     if (productEntries.length === 0) {
+         classNameString = "flex flex-col items-center justify-center min-h-[24rem] p-6";
+         htmlString = `
+           <div class="flex flex-col items-center justify-center min-h-[24rem] p-6">
+             <img
+               src="{% static 'image/orang-binggung.png' %}"
+               alt="Sad face"
+               class="w-64 h-64 mb-4"
+             />
+             <p class="text-center text-gray-600 mt-4">Belum ada data produk</p>
+           </div>
+        ` ;
+     }
+     else {
+         classNameString = "columns-1 sm:columns-2 lg:columns-3 gap-6 space-y-6 w-full"
+         productEntries.forEach((item) => {
+             htmlString += `
+             <div
+               class="relative border break-inside-avoid rounded-lg shadow-md bg-white p-4 mb-6 transition-transform duration-300 hover:shadow-lg"
+             >
+               <div class="flex flex-col items-left">
+                 <h3 class="text-2xl font-bold text-gray-800 mb-4 text-center">
+                   ${item.fields.name}
+                 </h3>
+                 <img
+                   src="media/${item.fields.image}"
+                   alt="Product Image"
+                   class="w-54 h-54 mx-auto object-cover rounded-md mb-4 border border-gray-300"
+                 />
+                 <p class="text-lg text-gray-700 mb-2 text-left">Description:</p>
+                 <p class="text-gray-600 mb-2 text-left">${item.fields.description}</p>
+                 <p class="text-xl font-bold text-black mb-2">
+                   Price: ${item.fields.price}
+                 </p>
+               </div>
+               <div class="flex justify-start gap-2 mt-2">
+                 <a
+                   href="/edit-product/${item.pk}"
+                   class="flex items-center justify-center w-10 h-10 bg-yellow-500 hover:bg-yellow-600 rounded-full shadow-md transition duration-300"
+                 >
+                   <svg
+                     xmlns="http://www.w3.org/2000/svg"
+                     class="w-6 h-6 text-white"
+                     viewBox="0 0 20 20"
+                     fill="currentColor"
+                   >
+                     <path
+                       d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z"
+                     />
+                   </svg>
+                 </a>
+                 <a
+                   href="/delete/${item.pk}"
+                   class="flex items-center justify-center w-10 h-10 bg-red-500 hover:bg-red-600 rounded-full shadow-md transition duration-300"
+                 >
+                   <svg
+                     xmlns="http://www.w3.org/2000/svg"
+                     class="w-6 h-6 text-white"
+                     viewBox="0 0 20 20"
+                     fill="currentColor"
+                   >
+                     <path
+                       fill-rule="evenodd"
+                       d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z"
+                       clip-rule="evenodd"
+                     />
+                   </svg>
+                 </a>
+               </div>
+             </div>
+ 
+        `;
+      });
+    }
+    document.getElementById("product_entry_cards").className = classNameString;
+    document.getElementById("product_entry_cards").innerHTML = htmlString;
+  }
+  refreshProductEntries();
+  ```
+**2. Buatlah sebuah tombol yang membuka sebuah modal dengan form untuk menambahkan mood.**
+- Tambahkan kode berikut untuk mengimplementasikan modal (Tailwind) pada aplikasi kamu.
+  ```html
+  <div id="crudModal" tabindex="-1" aria-hidden="true" class="hidden fixed inset-0 z-50 w-full flex items-center justify-center bg-gray-800 bg-opacity-50 overflow-x-hidden overflow-y-auto transition-opacity duration-300 ease-out">
+    <div id="crudModalContent" class="relative bg-white rounded-lg shadow-lg w-5/6 sm:w-3/4 md:w-1/2 lg:w-1/3 mx-4 sm:mx-0 transform scale-95 opacity-0 transition-transform transition-opacity duration-300 ease-out">
+      <!-- Modal header -->
+      <div class="flex items-center justify-between p-4 border-b rounded-t">
+        <h3 class="text-xl font-semibold text-gray-900">
+          Add New Product
+        </h3>
+        <button type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center" id="closeModalBtn">
+          <svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+            <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path>
+          </svg>
+          <span class="sr-only">Close modal</span>
+        </button>
+      </div>
+      <!-- Modal body -->
+      <div class="px-6 py-4 space-y-6 form-style">
+        <form id="productEntryForm">
+          <div class="mb-4">
+            <label for="name" class="block text-sm font-medium text-gray-700">Product Name</label>
+            <input type="text" id="name" name="name" class="mt-1 block w-full border border-gray-300 rounded-md p-2 hover:border-indigo-700" placeholder="Enter your Product Name" required>
+          </div>
+          <div class="mb-4">
+            <label for="price" class="block text-sm font-medium text-gray-700">Price</label>
+            <input type="text" id="price" name="price" class="mt-1 block w-full border border-gray-300 rounded-md p-2 hover:border-indigo-700" placeholder="Enter your Price" required>
+          </div>
+          <div class="mb-4">
+            <label for="Description" class="block text-sm font-medium text-gray-700">Description</label>
+            <textarea id="descriptionn" name="description" rows="3" class="mt-1 block w-full h-52 resize-none border border-gray-300 rounded-md p-2 hover:border-indigo-700" placeholder="Describe your Descriptions" required></textarea>
+          </div>
+          <div class="flex flex-col gap-2">
+            <label class="text-neutral-600 font-bold">Image</label>
+            <input type="file" name="image" accept="image/*" required="" aria-invalid="true" placeholder=""
+              class="flex h-10 w-full rounded-[12px] border-2 border-slate-500/50 bg-transparent px-5 py-3 text-sm focus-visible:outline-none focus-visible:border-slate-500">
+          </div>
+        </form>
+      </div>
+      <!-- Modal footer -->
+      <div class="flex flex-col space-y-2 md:flex-row md:space-y-0 md:space-x-2 p-6 border-t border-gray-200 rounded-b justify-center md:justify-end">
+        <button type="button" class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded-lg" id="cancelButton">Cancel</button>
+        <button type="submit" id="submitProductEntry" form="productEntryForm" class="bg-indigo-700 hover:bg-indigo-600 text-white font-bold py-2 px-4 rounded-lg">Save</button>
+      </div>
+    </div>
+  </div>
+  ```
+- Tambahkan fungsi-fungsi JavaScript berikut.
+  ```html
+  const modal = document.getElementById('crudModal');
+  const modalContent = document.getElementById('crudModalContent');
+
+  function showModal() {
+      const modal = document.getElementById('crudModal');
+      const modalContent = document.getElementById('crudModalContent');
+
+      modal.classList.remove('hidden'); 
+      setTimeout(() => {
+        modalContent.classList.remove('opacity-0', 'scale-95');
+        modalContent.classList.add('opacity-100', 'scale-100');
+      }, 50); 
+  }
+
+  function hideModal() {
+      const modal = document.getElementById('crudModal');
+      const modalContent = document.getElementById('crudModalContent');
+
+      modalContent.classList.remove('opacity-100', 'scale-100');
+      modalContent.classList.add('opacity-0', 'scale-95');
+
+      setTimeout(() => {
+        modal.classList.add('hidden');
+      }, 150); 
+  }
+
+  document.getElementById("cancelButton").addEventListener("click", hideModal);
+  document.getElementById("closeModalBtn").addEventListener("click", hideModal);
+  ```
+- tambahkan tombol baru untuk melakukan penambahan data dengan AJAX di navbar.
+  ```html
+  <button data-modal-target="crudModal" data-modal-toggle="crudModal" class="btn bg-indigo-700 hover:bg-indigo-600 text-white font-bold py-2 px-4 rounded-lg transition duration-300 ease-in-out transform hover:-translate-y-1 hover:scale-105" onclick="showModal();">
+        Add New Product
+      </button>
+  ```
+**3. Lakukan pengambilan data mood menggunakan AJAX GET. Pastikan bahwa data yang diambil hanyalah data milik pengguna yang logged-in dan buatlah fungsi view baru untuk menambahkan mood baru ke dalam basis data.**
+- Tambahkan kedua impor berikut pada file `views.py`.
+  ```python
+  from django.views.decorators.csrf import csrf_exempt
+  from django.views.decorators.http import require_POST
+  ```
+- Buatlah fungsi baru pada `views.py` dengan nama `add_mood_entry_ajax` yang menerima parameter `request`
+  ```python
+  @csrf_exempt
+  @require_POST
+  def add_product_entry_ajax(request):
+    name = request.POST.get("name")
+    price = request.POST.get("price")
+    description = request.POST.get("description")
+    image = request.FILES.get("image")
+    user = request.user
+
+    new_product = Product(
+        name=name, price=price,
+        description=description, image=image,
+        user=user
+    )
+    new_product.save()
+
+    return HttpResponse(b"CREATED", status=201)
+  ```
+**4. Buatlah path `/create-ajax/ yang mengarah ke fungsi view yang baru kamu buat dan hubungkan form yang telah kamu buat di dalam modal kamu ke path /create-ajax/.**
+- Buka urls.py yang ada pada subdirektori main dan impor fungsi yang sudah kamu buat tadi.
+  ```python
+    from main.views import ..., add_mood_entry_ajax
+  ```
+- Tambahkan path url ke dalam urlpatterns untuk mengakses fungsi yang sudah diimpor tadi.
+  ```python
+  urlpatterns = [
+    ...
+    path('create-mood-entry-ajax', add_mood_entry_ajax, name='add_mood_entry_ajax'),
+  ]
+  ```
