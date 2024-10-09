@@ -1103,7 +1103,7 @@ Karena secara frontend hanya berpengaruh kepada tampilan dan uinya saja tetapi d
     async function getProductEntries(){
        return fetch("{% url 'main:show_json' %}").then((res) => res.json())
      }
-      ```
+   ```
 - Buatlah **fungsi baru** pada block `<script>` dengan nama `refreshProductEntries`
   ```html
      async function refreshProductEntries() {
@@ -1184,13 +1184,133 @@ Karena secara frontend hanya berpengaruh kepada tampilan dan uinya saja tetapi d
                </div>
              </div>
  
-             `;
-         });
-     }
-     document.getElementById("product_entry_cards").className = classNameString;
-     document.getElementById("product_entry_cards").innerHTML = htmlString;
-   }
-   refreshProductEntries();
-   ```
+        `;
+      });
+    }
+    document.getElementById("product_entry_cards").className = classNameString;
+    document.getElementById("product_entry_cards").innerHTML = htmlString;
+  }
+  refreshProductEntries();
+  ```
 **2. Buatlah sebuah tombol yang membuka sebuah modal dengan form untuk menambahkan mood.**
-- 
+- Tambahkan kode berikut untuk mengimplementasikan modal (Tailwind) pada aplikasi kamu.
+  ```
+  <div id="crudModal" tabindex="-1" aria-hidden="true" class="hidden fixed inset-0 z-50 w-full flex items-center justify-center bg-gray-800 bg-opacity-50 overflow-x-hidden overflow-y-auto transition-opacity duration-300 ease-out">
+    <div id="crudModalContent" class="relative bg-white rounded-lg shadow-lg w-5/6 sm:w-3/4 md:w-1/2 lg:w-1/3 mx-4 sm:mx-0 transform scale-95 opacity-0 transition-transform transition-opacity duration-300 ease-out">
+      <!-- Modal header -->
+      <div class="flex items-center justify-between p-4 border-b rounded-t">
+        <h3 class="text-xl font-semibold text-gray-900">
+          Add New Product
+        </h3>
+        <button type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center" id="closeModalBtn">
+          <svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+            <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path>
+          </svg>
+          <span class="sr-only">Close modal</span>
+        </button>
+      </div>
+      <!-- Modal body -->
+      <div class="px-6 py-4 space-y-6 form-style">
+        <form id="productEntryForm">
+          <div class="mb-4">
+            <label for="name" class="block text-sm font-medium text-gray-700">Product Name</label>
+            <input type="text" id="name" name="name" class="mt-1 block w-full border border-gray-300 rounded-md p-2 hover:border-indigo-700" placeholder="Enter your Product Name" required>
+          </div>
+          <div class="mb-4">
+            <label for="price" class="block text-sm font-medium text-gray-700">Price</label>
+            <input type="text" id="price" name="price" class="mt-1 block w-full border border-gray-300 rounded-md p-2 hover:border-indigo-700" placeholder="Enter your Price" required>
+          </div>
+          <div class="mb-4">
+            <label for="Description" class="block text-sm font-medium text-gray-700">Description</label>
+            <textarea id="descriptionn" name="description" rows="3" class="mt-1 block w-full h-52 resize-none border border-gray-300 rounded-md p-2 hover:border-indigo-700" placeholder="Describe your Descriptions" required></textarea>
+          </div>
+          <div class="flex flex-col gap-2">
+            <label class="text-neutral-600 font-bold">Image</label>
+            <input type="file" name="image" accept="image/*" required="" aria-invalid="true" placeholder=""
+              class="flex h-10 w-full rounded-[12px] border-2 border-slate-500/50 bg-transparent px-5 py-3 text-sm focus-visible:outline-none focus-visible:border-slate-500">
+          </div>
+        </form>
+      </div>
+      <!-- Modal footer -->
+      <div class="flex flex-col space-y-2 md:flex-row md:space-y-0 md:space-x-2 p-6 border-t border-gray-200 rounded-b justify-center md:justify-end">
+        <button type="button" class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded-lg" id="cancelButton">Cancel</button>
+        <button type="submit" id="submitProductEntry" form="productEntryForm" class="bg-indigo-700 hover:bg-indigo-600 text-white font-bold py-2 px-4 rounded-lg">Save</button>
+      </div>
+    </div>
+  </div>
+  ```
+- Tambahkan fungsi-fungsi JavaScript berikut.
+  ```
+  const modal = document.getElementById('crudModal');
+  const modalContent = document.getElementById('crudModalContent');
+
+  function showModal() {
+      const modal = document.getElementById('crudModal');
+      const modalContent = document.getElementById('crudModalContent');
+
+      modal.classList.remove('hidden'); 
+      setTimeout(() => {
+        modalContent.classList.remove('opacity-0', 'scale-95');
+        modalContent.classList.add('opacity-100', 'scale-100');
+      }, 50); 
+  }
+
+  function hideModal() {
+      const modal = document.getElementById('crudModal');
+      const modalContent = document.getElementById('crudModalContent');
+
+      modalContent.classList.remove('opacity-100', 'scale-100');
+      modalContent.classList.add('opacity-0', 'scale-95');
+
+      setTimeout(() => {
+        modal.classList.add('hidden');
+      }, 150); 
+  }
+
+  document.getElementById("cancelButton").addEventListener("click", hideModal);
+  document.getElementById("closeModalBtn").addEventListener("click", hideModal);
+  ```
+- tambahkan tombol baru untuk melakukan penambahan data dengan AJAX di navbar.
+  ```
+  <button data-modal-target="crudModal" data-modal-toggle="crudModal" class="btn bg-indigo-700 hover:bg-indigo-600 text-white font-bold py-2 px-4 rounded-lg transition duration-300 ease-in-out transform hover:-translate-y-1 hover:scale-105" onclick="showModal();">
+        Add New Product
+      </button>
+  ```
+**3. Lakukan pengambilan data mood menggunakan AJAX GET. Pastikan bahwa data yang diambil hanyalah data milik pengguna yang logged-in dan buatlah fungsi view baru untuk menambahkan mood baru ke dalam basis data.**
+- Tambahkan kedua impor berikut pada file `views.py`.
+  ```
+  from django.views.decorators.csrf import csrf_exempt
+  from django.views.decorators.http import require_POST
+  ```
+- Buatlah fungsi baru pada `views.py` dengan nama `add_mood_entry_ajax` yang menerima parameter `request`
+  ```
+  @csrf_exempt
+  @require_POST
+  def add_product_entry_ajax(request):
+    name = request.POST.get("name")
+    price = request.POST.get("price")
+    description = request.POST.get("description")
+    image = request.FILES.get("image")
+    user = request.user
+
+    new_product = Product(
+        name=name, price=price,
+        description=description, image=image,
+        user=user
+    )
+    new_product.save()
+
+    return HttpResponse(b"CREATED", status=201)
+  ```
+**4. Buatlah path `/create-ajax/ yang mengarah ke fungsi view yang baru kamu buat dan hubungkan form yang telah kamu buat di dalam modal kamu ke path /create-ajax/.**
+- Buka urls.py yang ada pada subdirektori main dan impor fungsi yang sudah kamu buat tadi.
+  ```
+    from main.views import ..., add_mood_entry_ajax
+  ```
+- Tambahkan path url ke dalam urlpatterns untuk mengakses fungsi yang sudah diimpor tadi.
+  ```
+  urlpatterns = [
+    ...
+    path('create-mood-entry-ajax', add_mood_entry_ajax, name='add_mood_entry_ajax'),
+  ]
+  ```
