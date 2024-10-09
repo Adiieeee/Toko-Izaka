@@ -1050,3 +1050,147 @@ Kegunaan: Tata Letak Kompleks, Kontrol yang Lebih Baik, Responsif
   ```
 
   
+
+# Tugas 6
+### Jelaskan manfaat dari penggunaan JavaScript dalam pengembangan aplikasi web!
+- **Interaktivitas yang tinggi**
+  - **Responsif terhadap pengguna**
+    JavaScript memungkinkan elemen-elemen dalam halaman web merespons aksi pengguna secara real-time, seperti ketika pengguna mengklik tombol, mengarahkan kursor, atau mengisi formulir.
+  - **Pengalaman pengguna yang lebih baik**
+    
+    Dengan interaktivitas yang tinggi, pengguna merasa lebih terlibat dan terhubung dengan aplikasi web.
+- **Pengolahan data secara real-time**
+  
+  Dengan JavaScript, aplikasi dapat menangani data pengguna secara langsung, seperti validasi formulir atau menampilkan hasil secara langsung.
+- **Kompabilitas lintas platform**
+  
+  JavaScript dapat dijalankan di berbagai peramban dan platform, memudahkan pengembang untuk membuat aplikasi web yang konsisten.
+- **Pemrograman Asinkron**
+  
+  Dengan AJAX dan Fetch API, memungkinkan aplikasi untuk berkomunikasi dengan server tanpa perlu memuat ulang halaman.
+
+
+### Jelaskan fungsi dari penggunaan `await` ketika kita menggunakan `fetch()`! Apa yang akan terjadi jika kita tidak menggunakan `await`?
+Fungsi penggunaan await saat menggunakan fetch() adalah untuk menunggu sampai permintaan HTTP selesai dan menerima responsnya sebelum melanjutkan eksekusi kode. fetch() adalah operasi asinkron, dan await memastikan bahwa hasil dari fetch() dapat diproses setelah respons diterima.
+Jika tidak menggunakan await, JavaScript akan melanjutkan eksekusi kode berikutnya tanpa menunggu hasil fetch(), yang bisa menyebabkan kesalahan karena data mungkin belum tersedia saat kode mencoba menggunakannya. Ini dapat menghasilkan nilai Promise yang belum terselesaikan.
+
+
+### Mengapa kita perlu menggunakan decorator `csrf_exempt` pada view yang akan digunakan untuk AJAX `POST`?
+`csrf_exempt` digunakan untuk menghindari pemeriksaan Cross-Site Request Forgery (CSRF) pada view tertentu. Tanpa decorator ini, permintaan AJAX POST dari halaman web yang sama akan ditolak jika tidak memiliki token CSRF yang valid. Ini adalah langkah keamanan untuk melindungi dari serangan CSRF
+
+
+### Pada tutorial PBP minggu ini, pembersihan data input pengguna dilakukan di belakang (backend) juga. Mengapa hal tersebut tidak dilakukan di frontend saja?
+Karena secara frontend hanya berpengaruh kepada tampilan dan uinya saja tetapi data di databasenya masih ada, oleh karena itu perlu dibersihkan di backend juga untuk memastikan datanya beneran tidak ada
+
+### Jelaskan bagaimana cara kamu mengimplementasikan checklist di atas secara step-by-step (bukan hanya sekadar mengikuti tutorial)!
+**1. Ubahlah kode cards data mood agar dapat mendukung AJAX GET.**
+- Bukalah berkas `views.py` dan **hapus dua baris** berikut.
+  ```python
+   mood_entries = MoodEntry.objects.filter(user=request.user)
+  'mood_entries': mood_entries,
+  ```
+- Bukalah berkas `views.py` dan ubahlah baris pertama views untuk `show_json` dan `show_xml`
+   ```python
+   data = MoodEntry.objects.filter(user=request.user)
+   ```
+- Bukalah berkas `main.html.` Hapus bagian block conditional `product_entries`
+- tambahkan potongan kode ini di tempat yang sama.
+  ```html
+  <div id="product_entry_cards"></div>
+  ```
+- Buatlah block `<script>` di bagian bawah berkas kamu (sebelum `{% endblock content %}`)
+   ```html
+    async function getProductEntries(){
+       return fetch("{% url 'main:show_json' %}").then((res) => res.json())
+     }
+      ```
+- Buatlah **fungsi baru** pada block `<script>` dengan nama `refreshProductEntries`
+  ```html
+     async function refreshProductEntries() {
+     document.getElementById("product_entry_cards").innerHTML = "";
+     document.getElementById("product_entry_cards").className = "";
+     const productEntries = await getProductEntries();
+     let htmlString = "";
+     let classNameString = "";
+
+     if (productEntries.length === 0) {
+         classNameString = "flex flex-col items-center justify-center min-h-[24rem] p-6";
+         htmlString = `
+           <div class="flex flex-col items-center justify-center min-h-[24rem] p-6">
+             <img
+               src="{% static 'image/orang-binggung.png' %}"
+               alt="Sad face"
+               class="w-64 h-64 mb-4"
+             />
+             <p class="text-center text-gray-600 mt-4">Belum ada data produk</p>
+           </div>
+        ` ;
+     }
+     else {
+         classNameString = "columns-1 sm:columns-2 lg:columns-3 gap-6 space-y-6 w-full"
+         productEntries.forEach((item) => {
+             htmlString += `
+             <div
+               class="relative border break-inside-avoid rounded-lg shadow-md bg-white p-4 mb-6 transition-transform duration-300 hover:shadow-lg"
+             >
+               <div class="flex flex-col items-left">
+                 <h3 class="text-2xl font-bold text-gray-800 mb-4 text-center">
+                   ${item.fields.name}
+                 </h3>
+                 <img
+                   src="media/${item.fields.image}"
+                   alt="Product Image"
+                   class="w-54 h-54 mx-auto object-cover rounded-md mb-4 border border-gray-300"
+                 />
+                 <p class="text-lg text-gray-700 mb-2 text-left">Description:</p>
+                 <p class="text-gray-600 mb-2 text-left">${item.fields.description}</p>
+                 <p class="text-xl font-bold text-black mb-2">
+                   Price: ${item.fields.price}
+                 </p>
+               </div>
+               <div class="flex justify-start gap-2 mt-2">
+                 <a
+                   href="/edit-product/${item.pk}"
+                   class="flex items-center justify-center w-10 h-10 bg-yellow-500 hover:bg-yellow-600 rounded-full shadow-md transition duration-300"
+                 >
+                   <svg
+                     xmlns="http://www.w3.org/2000/svg"
+                     class="w-6 h-6 text-white"
+                     viewBox="0 0 20 20"
+                     fill="currentColor"
+                   >
+                     <path
+                       d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z"
+                     />
+                   </svg>
+                 </a>
+                 <a
+                   href="/delete/${item.pk}"
+                   class="flex items-center justify-center w-10 h-10 bg-red-500 hover:bg-red-600 rounded-full shadow-md transition duration-300"
+                 >
+                   <svg
+                     xmlns="http://www.w3.org/2000/svg"
+                     class="w-6 h-6 text-white"
+                     viewBox="0 0 20 20"
+                     fill="currentColor"
+                   >
+                     <path
+                       fill-rule="evenodd"
+                       d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z"
+                       clip-rule="evenodd"
+                     />
+                   </svg>
+                 </a>
+               </div>
+             </div>
+ 
+             `;
+         });
+     }
+     document.getElementById("product_entry_cards").className = classNameString;
+     document.getElementById("product_entry_cards").innerHTML = htmlString;
+   }
+   refreshProductEntries();
+   ```
+**2. Buatlah sebuah tombol yang membuka sebuah modal dengan form untuk menambahkan mood.**
+- 
