@@ -1051,7 +1051,7 @@ Kegunaan: Tata Letak Kompleks, Kontrol yang Lebih Baik, Responsif
 
   
 
-# Tugas 6
+# Tugas 6 PBP
 ### Jelaskan manfaat dari penggunaan JavaScript dalam pengembangan aplikasi web!
 - **Interaktivitas yang tinggi**
   - **Responsif terhadap pengguna**
@@ -1194,7 +1194,7 @@ Karena secara frontend hanya berpengaruh kepada tampilan dan uinya saja tetapi d
   ```
 **2. Buatlah sebuah tombol yang membuka sebuah modal dengan form untuk menambahkan mood.**
 - Tambahkan kode berikut untuk mengimplementasikan modal (Tailwind) pada aplikasi kamu.
-  ```
+  ```html
   <div id="crudModal" tabindex="-1" aria-hidden="true" class="hidden fixed inset-0 z-50 w-full flex items-center justify-center bg-gray-800 bg-opacity-50 overflow-x-hidden overflow-y-auto transition-opacity duration-300 ease-out">
     <div id="crudModalContent" class="relative bg-white rounded-lg shadow-lg w-5/6 sm:w-3/4 md:w-1/2 lg:w-1/3 mx-4 sm:mx-0 transform scale-95 opacity-0 transition-transform transition-opacity duration-300 ease-out">
       <!-- Modal header -->
@@ -1240,7 +1240,7 @@ Karena secara frontend hanya berpengaruh kepada tampilan dan uinya saja tetapi d
   </div>
   ```
 - Tambahkan fungsi-fungsi JavaScript berikut.
-  ```
+  ```html
   const modal = document.getElementById('crudModal');
   const modalContent = document.getElementById('crudModalContent');
 
@@ -1271,19 +1271,19 @@ Karena secara frontend hanya berpengaruh kepada tampilan dan uinya saja tetapi d
   document.getElementById("closeModalBtn").addEventListener("click", hideModal);
   ```
 - tambahkan tombol baru untuk melakukan penambahan data dengan AJAX di navbar.
-  ```
+  ```html
   <button data-modal-target="crudModal" data-modal-toggle="crudModal" class="btn bg-indigo-700 hover:bg-indigo-600 text-white font-bold py-2 px-4 rounded-lg transition duration-300 ease-in-out transform hover:-translate-y-1 hover:scale-105" onclick="showModal();">
         Add New Product
       </button>
   ```
 **3. Lakukan pengambilan data mood menggunakan AJAX GET. Pastikan bahwa data yang diambil hanyalah data milik pengguna yang logged-in dan buatlah fungsi view baru untuk menambahkan mood baru ke dalam basis data.**
 - Tambahkan kedua impor berikut pada file `views.py`.
-  ```
+  ```python
   from django.views.decorators.csrf import csrf_exempt
   from django.views.decorators.http import require_POST
   ```
 - Buatlah fungsi baru pada `views.py` dengan nama `add_mood_entry_ajax` yang menerima parameter `request`
-  ```
+  ```python
   @csrf_exempt
   @require_POST
   def add_product_entry_ajax(request):
@@ -1304,11 +1304,11 @@ Karena secara frontend hanya berpengaruh kepada tampilan dan uinya saja tetapi d
   ```
 **4. Buatlah path `/create-ajax/ yang mengarah ke fungsi view yang baru kamu buat dan hubungkan form yang telah kamu buat di dalam modal kamu ke path /create-ajax/.**
 - Buka urls.py yang ada pada subdirektori main dan impor fungsi yang sudah kamu buat tadi.
-  ```
+  ```python
     from main.views import ..., add_mood_entry_ajax
   ```
 - Tambahkan path url ke dalam urlpatterns untuk mengakses fungsi yang sudah diimpor tadi.
-  ```
+  ```python
   urlpatterns = [
     ...
     path('create-mood-entry-ajax', add_mood_entry_ajax, name='add_mood_entry_ajax'),
