@@ -7,7 +7,7 @@
 
     <!-- Menu Items and Authentication -->
     <div class="hidden md:flex md:items-center justify-center space-x-8">
-      <ul class="flex flex-row space-x-8">
+      <ul class="flex flex-row space-x-10">
         <li><a href="#" class="text-gray-700 hover:text-indigo-600">Home</a></li>
         <li><a href="#" class="text-gray-700 hover:text-indigo-600">About</a></li>
         <li><a href="#" class="text-gray-700 hover:text-indigo-600">Services</a></li>
@@ -36,6 +36,13 @@
         <a href="{% url 'main:login' %}" class="bg-indigo-500 hover:bg-indigo-600 text-white font-semibold py-2 px-4 rounded-full">Login</a>
         <a href="{% url 'main:register' %}" class="bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded-full">Register</a>
       {% endif %}
+
+      <span class="h-8 border-l border-gray-300 mx-4"></span>
+
+      <button data-modal-target="crudModal" data-modal-toggle="crudModal" class="btn bg-indigo-700 hover:bg-indigo-600 text-white font-bold py-2 px-4 rounded-lg transition duration-300 ease-in-out transform hover:-translate-y-1 hover:scale-105" onclick="showModal();">
+        Add New Product
+      </button>
+
     </div>
 
     <!-- Mobile Menu Button -->
